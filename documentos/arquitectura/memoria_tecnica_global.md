@@ -51,6 +51,7 @@
 | ADR-01 | **Respaldos: Git interno (contenido) + PostgreSQL (metadatos)** | Todo en BD / todo en Git | Git aporta versionado y diff nativos (RF-07); PostgreSQL aporta consulta/filtro/paginación. Ver §4.4 y plan §13 |
 | ADR-02 | **Respaldo de `running-config` + `startup-config`** con flag `unsavedChanges` y **escalamiento por evento** | Solo running-config | Detecta cambios sin guardar; escala vía `config.unsaved_changes_detected` (regla configurable en alerting) |
 | ADR-03 | **Canales de notificación enchufables** (adapter/strategy) | Canales cableados | Email + Telegram como adaptadores MVP (RF-32); nuevos canales sin refactor |
+| ADR-04 | **Transactional outbox** para publicar eventos al broker | Publicación directa (dual write) | Consistencia BD↔RabbitMQ: el evento se publica solo si la transacción de BD confirmó. Ver `especificaciones/comunicacion_por_eventos.md` |
 
 > Las ADR-01/02/03 se originaron en la revisión del plan general
 > (`../planificacion/plan_general_proyecto_redSegura.md` §13) y se consolidan aquí como
