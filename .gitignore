@@ -1,0 +1,33 @@
+# === Sistema operativo ===
+.DS_Store
+Thumbs.db
+
+# === Editores / IDE ===
+.idea/
+.vscode/
+*.swp
+*~
+
+# === Secretos y entorno ===
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# === Logs ===
+*.log
+
+# === Terraform (infraestructura, fase posterior) ===
+.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+*.tfvars
+!*.tfvars.example
+
+# === Kubernetes / Helm (fase posterior) ===
+*.kubeconfig
+
+# === Node (si se usa tooling de docs) ===
+node_modules/
