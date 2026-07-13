@@ -5,7 +5,7 @@
 > decisiones transversales nuevas. Conciso: **decisiones y contratos, no tutoriales**.
 > Requerimientos (RF/RNF) y matriz RBAC completa: `../proyecto_microservicios_redsegura.md`.
 
-**Versión:** 0.2.0 · **Última actualización:** 2026-07-12 · **Estado:** en desarrollo (Fase A)
+**Versión:** 0.3.0 · **Última actualización:** 2026-07-12 · **Estado:** en desarrollo (Fase A)
 
 ---
 
@@ -55,6 +55,10 @@
 | ADR-05 | **Contract-first en Java** (openapi-generator) y **code-first + check de divergencia en Python** (FastAPI) | Code-first uniforme (springdoc/FastAPI) / contract-first uniforme | Java genera interfaces+DTOs desde el `openapi.yaml` (cumple el contrato por construcción); Python genera su OpenAPI desde el código y CI lo compara contra el `openapi.yaml` comprometido (falla si divergen). Mantiene el `openapi.yaml` como fuente de verdad en ambos stacks |
 | ADR-06 | **Mapeo entidad↔DTO: MapStruct en Java, Pydantic `from_attributes` en Python** | Mapeo manual / ModelMapper (reflexión) | Java: MapStruct genera mappers en compilación (type-safe, sin reflexión), en el POM padre. Python: no requiere librería aparte; Pydantic convierte ORM↔DTO. Cumple la regla "DTO↔entidad explícito, nunca exponer entidades" |
 | ADR-07 | **Columnas de auditoría estándar** (`created_at/by`, `updated_at/by`) auto-pobladas | Sin auditoría / auditoría manual | Patrón único en toda entidad persistida: cuarteto en entidades modificables por usuario; `created_*` en registros disparados por usuario; los generados por el sistema se rastrean por su timestamp + evento origen. Java: JPA Auditing; Python: SQLAlchemy + servicio, `*_by` desde el JWT. Ver `estandares_desarrollo.md §11` |
+| ADR-08 | **Modelo de error `RFC 7807/9457` (Problem Details)** + `PATCH` = **JSON Merge Patch (RFC 7386)** | Error propietario `{code,message}` / PATCH ambiguo | `application/problem+json` con `type,title,status,detail,instance` (+ `traceId`); PATCH parcial con semántica merge. Estándar de la industria; reemplaza el `ApiError` propietario. Global (10 servicios) |
+| ADR-09 | **Fiabilidad y concurrencia HTTP:** `Idempotency-Key` en escrituras + `ETag`/`If-Match` (RFC 7232) | Sin idempotencia (duplicados por reintento) / *lost updates* | POST de creación acepta `Idempotency-Key` (deduplica reintentos); GET devuelve `ETag`, y `PUT/PATCH/DELETE` exigen `If-Match` → mapea el bloqueo optimista (`@Version`) al protocolo HTTP. Global |
+| ADR-10 | **Health probes diferenciados** liveness / readiness / startup | `/health` único | `GET /health/liveness` (¿el proceso vive?), `/health/readiness` (¿listo para tráfico: BD/broker OK?), startup. Spring Actuator *health groups* / equivalente FastAPI. Requisito de Kubernetes (no enrutar hasta readiness). Global |
+| ADR-11 | **Seguridad de datos:** redacción de campos sensibles por rol (server-side) + **log de auditoría de seguridad** (OWASP A09) | Confiar en ocultar en cliente / sin traza de seguridad | Matriz campo×rol aplicada en el servidor (p. ej. `mgmtIp` enmascarada para Auditor); log estructurado marca `security` de accesos denegados (403), autenticaciones fallidas y mutaciones con actor. Global |
 
 > Las ADR-01/02/03 se originaron en la revisión del plan general
 > (`../planificacion/plan_general_proyecto_redSegura.md` §13) y se consolidan aquí como

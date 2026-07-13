@@ -95,8 +95,9 @@ codigo/backend/<servicio>/
 
 ## 4. Manejo de errores
 
-- **Modelo uniforme (RNF-09):** respuesta *problem+json* con `code`, `message`, `traceId`.
-  **Nunca** filtrar stack traces ni nombres de tablas/clases al cliente.
+- **Modelo uniforme (RFC 7807/9457 Problem Details, ADR-08):** respuestas de error con
+  `Content-Type: application/problem+json` y campos `type`, `title`, `status`, `detail`,
+  `instance` (+ `traceId`). **Nunca** filtrar stack traces ni nombres de tablas/clases al cliente.
 - **Códigos:** 400 (malformada) · 401 (no autenticado) · 403 (autenticado sin permiso) ·
   404 (no existe) · 409 (conflicto de estado) · 422 (validación de negocio).
 - **Centralización:** Java → `@RestControllerAdvice` global; Python → *exception handlers* de
@@ -221,6 +222,35 @@ columnas de auditoría **auto-pobladas** (nunca a mano):
   solo por migraciones versionadas (nunca a mano).
 - **Integridad referencial y reglas de negocio en la capa de servicio**, no solo en la BD.
 - **Datos de referencia sembrados de forma idempotente** por la aplicación, no por scripts manuales.
+
+---
+
+## 12. Contrato HTTP y seguridad de datos (estándares de industria)
+
+**Errores y actualización (ADR-08):**
+- Errores en formato **RFC 7807/9457** (`application/problem+json`) — ver §4.
+- **`PATCH` = JSON Merge Patch (RFC 7386)** (`application/merge-patch+json`) para edición parcial.
+
+**Fiabilidad y concurrencia (ADR-09):**
+- **Idempotencia:** las creaciones (`POST`) aceptan la cabecera **`Idempotency-Key`**; el servicio
+  deduplica reintentos (misma clave → misma respuesta, no crea duplicados).
+- **Concurrencia optimista sobre HTTP:** las respuestas de lectura devuelven **`ETag`**; las
+  mutaciones (`PUT`/`PATCH`/`DELETE`) exigen **`If-Match`** (RFC 7232) → si el ETag no coincide,
+  **412 Precondition Failed**. Mapea el bloqueo optimista (`@Version`) al protocolo HTTP y evita
+  *lost updates*.
+
+**Health probes (ADR-10):** cada servicio expone **`/health/liveness`** (¿el proceso vive?),
+**`/health/readiness`** (¿dependencias BD/broker OK, listo para tráfico?) y *startup*. Java →
+Spring Actuator *health groups*; Python → endpoints equivalentes. Kubernetes no enruta tráfico
+hasta *readiness*.
+
+**Seguridad de datos (ADR-11):**
+- **Redacción de campos sensibles por rol (server-side):** matriz campo×rol aplicada en el
+  servidor, **nunca** solo ocultando en el cliente. El servicio devuelve el valor enmascarado a
+  los roles no autorizados (no el valor real "oculto por CSS").
+- **Log de auditoría de seguridad (OWASP A09):** registrar en log estructurado (marca `security`)
+  los accesos **denegados** (403), autenticaciones fallidas (401) y las mutaciones con su actor.
+  Distinto del log de aplicación y de las columnas de auditoría de datos (ADR-07).
 
 ---
 
