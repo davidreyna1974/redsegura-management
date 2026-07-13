@@ -62,6 +62,9 @@ codigo/backend/<servicio>/
 - **Contrato (contract-first, ADR-05):** el `openapi.yaml` es la **entrada**; se generan las
   interfaces de API + DTOs con `openapi-generator-maven-plugin` y el controlador **implementa**
   la interfaz generada. El código cumple el contrato por construcción.
+- **Mapeo entidad ↔ DTO (ADR-06):** **MapStruct** (generación en tiempo de compilación,
+  type-safe, sin reflexión), configurado en el POM padre (`dependencyManagement` +
+  `annotationProcessorPaths` del compiler plugin). Nunca mapear a mano ni exponer entidades.
 
 ### 3.2 Python 3.12 / FastAPI (servicios de automatización de red y seguridad)
 - **Gestión de paquetes:** `pip`/`uv` con dependencias fijadas.
@@ -73,6 +76,9 @@ codigo/backend/<servicio>/
   código**; el `openapi.yaml` comprometido es el contrato de diseño. En CI se compara el OpenAPI
   que produce el servicio (`app.openapi()`) contra el `openapi.yaml`; si divergen, el gate
   **falla**. Los modelos Pydantic pueden sembrarse desde el YAML con `datamodel-code-generator`.
+- **Mapeo ORM ↔ DTO (ADR-06):** **no** se usa una librería tipo MapStruct; se usa **Pydantic**:
+  entidad→DTO con `model_config = ConfigDict(from_attributes=True)` (`DTO.model_validate(orm)`),
+  y DTO→entidad construyendo el objeto ORM con `dto.model_dump()`.
 
 ### 3.3 Angular (dashboard — repo `frontend`)
 - **Lint + formato:** **ESLint + Prettier**; TypeScript en modo **strict**.
