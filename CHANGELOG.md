@@ -16,7 +16,10 @@ versionado según [SemVer](https://semver.org/lang/es/).
   desarrollo (Java/Python/Angular + logging) y especificación de comunicación por eventos.
 - Decisiones de arquitectura registradas: ADR-01 (almacenamiento Git+PostgreSQL de respaldos),
   ADR-02 (running/startup + `unsavedChanges`), ADR-03 (canales de notificación enchufables),
-  ADR-04 (transactional outbox).
+  ADR-04 (transactional outbox), ADR-05 (contract-first Java / code-first + check Python),
+  ADR-06 (MapStruct / Pydantic para entidad↔DTO), ADR-07 (columnas de auditoría estándar).
 - Protocolo de verificación en 4 fases (metodología de QA global).
 - Documentación del repositorio: README raíz del sistema, SECURITY, plantilla de PR, índice de
   documentación.
+- Repositorios remotos publicados en GitHub (`redsegura-management`, `redsegura-backend`,
+  públicos) con branch protection (`main` requiere PR; `develop` con historial protegido).

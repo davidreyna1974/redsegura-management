@@ -5,7 +5,7 @@
 > decisiones transversales nuevas. Conciso: **decisiones y contratos, no tutoriales**.
 > Requerimientos (RF/RNF) y matriz RBAC completa: `../proyecto_microservicios_redsegura.md`.
 
-**Versión:** 0.1.0 · **Última actualización:** 2026-07-11 · **Estado:** en desarrollo (Fundación)
+**Versión:** 0.2.0 · **Última actualización:** 2026-07-12 · **Estado:** en desarrollo (Fase A)
 
 ---
 
@@ -238,12 +238,16 @@ la capa de servicio, y contratos OpenAPI desde la primera versión (RNF-27).
 
 ## 8. Estado del proyecto y métricas
 
-- **Fase:** Fundación (en curso). Ningún microservicio construido todavía.
-- **Repositorios:** `management` y `backend` versionados localmente (git init hecho); remotos
-  GitHub pendientes (tarea 14). `frontend` sin inicializar.
-- **Documentación de arquitectura:** plan general ✅; memoria técnica global (este doc) en
-  redacción; diagrama, estándares, especificación de eventos y protocolo de QA pendientes.
-- **Tests / cobertura:** N/A (sin código). Umbral objetivo: ≥ 70 % statements por servicio.
+- **Fase:** Fundación **completa**; inicia la construcción de Fase A. Ningún microservicio
+  implementado todavía.
+- **Repositorios:** `management` y `backend` versionados y **publicados en GitHub**
+  (`redsegura-management`, `redsegura-backend`, públicos) con branch protection (`main` requiere
+  PR; `develop` con historial protegido). `frontend` sin inicializar.
+- **Documentación de arquitectura:** ✅ completa — plan general, memoria técnica global (este
+  doc, ADR-01..07), diagrama, estándares, especificación de eventos y protocolo de QA.
+- **Contratos:** ✅ 5 contratos OpenAPI de Fase A definidos y validados (redocly, 0 errores);
+  catálogo de eventos definido.
+- **Tests / cobertura:** N/A (sin código de servicios). Umbral objetivo: ≥ 70 % statements por servicio.
 
 ---
 
@@ -256,13 +260,17 @@ la capa de servicio, y contratos OpenAPI desde la primera versión (RNF-27).
 
 ---
 
-## 10. Roadmap / pendientes (Fundación)
+## 10. Roadmap / pendientes
 
-- [ ] Diagrama de arquitectura (Mermaid) — tarea 4.
-- [ ] Estándares de desarrollo (Java/Python/Angular + logging) — tarea 5.
-- [ ] Especificación de comunicación por eventos (esquemas JSON) — tarea 6.
-- [ ] Protocolo de verificación en 4 fases — tarea 7.
-- [ ] `git init` backend + POM padre + contratos OpenAPI de Fase A — tareas 8–10.
-- [ ] Documentación de repositorio (README/CHANGELOG/SECURITY/CI) — tareas 11–12.
-- [ ] Integración a `develop` (merge `--no-ff`) y creación de remotos GitHub — tareas 13–14.
-- [ ] Trasladar decisiones futuras y lecciones a este documento al cerrar cada módulo.
+**Fundación — completada:**
+- [x] Arquitectura global (memoria técnica, diagrama, estándares, eventos, protocolo de QA).
+- [x] POM padre (Java 21, calidad, MapStruct) + 5 contratos OpenAPI de Fase A (validados).
+- [x] Documentación de ambos repositorios; `git init` + git-hook; merges `--no-ff` a `develop`.
+- [x] Repos remotos en GitHub + branch protection + esqueleto de CI.
+
+**Fase A — en curso:**
+- [ ] `asset-inventory-service` (primer servicio; propuesta de módulo ✅): casos de prueba →
+  scaffolding → implementación → gatekeeper ≥ 70 %.
+- [ ] `config-backup-service`, `compliance-audit-service`, `alerting-service`, `notification-service`.
+- [ ] Golden path E2E en Docker Compose.
+- [ ] Trasladar decisiones y lecciones a este documento al cerrar cada módulo.
