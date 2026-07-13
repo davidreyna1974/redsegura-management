@@ -188,6 +188,42 @@ codigo/backend/<servicio>/
 
 ---
 
+## 11. Datos y persistencia
+
+**Columnas de auditoría estándar (patrón único, ADR-07).** Toda entidad persistida lleva
+columnas de auditoría **auto-pobladas** (nunca a mano):
+
+| Columna | Significado |
+|---|---|
+| `created_at` | Marca de tiempo de creación (UTC) |
+| `created_by` | Usuario que creó el registro (del JWT) |
+| `updated_at` | Marca de tiempo de la última modificación |
+| `updated_by` | Usuario de la última modificación |
+
+- **Entidades modificables por el usuario** (p. ej. `Device`, `Schedule`, `AlertRule`,
+  `Template`, `ChannelConfig`, tickets de remediación) → **las cuatro** columnas.
+- **Registros generados por el sistema / inmutables** (p. ej. `Alert`, `Notification`,
+  `Finding`) → se rastrean por su **propia marca de tiempo** y por el **evento/regla origen**;
+  no llevan `updated_*` (no se editan). Los que un usuario dispara (`Backup`, `Audit`) llevan
+  `created_by` = usuario que los originó (o el planificador, si es programado).
+- **Auto-población:** Java → **JPA Auditing** (`@CreatedDate`, `@LastModifiedDate`,
+  `@CreatedBy`, `@LastModifiedBy` en una `@MappedSuperclass` base + `@EnableJpaAuditing` +
+  `AuditorAware` que lee el usuario del JWT). Python → SQLAlchemy con `server_default=now()` /
+  `onupdate=now()` para las fechas y la capa de servicio (o un event listener) para `*_by`
+  desde el usuario autenticado.
+- **Exposición:** `created_at`/`updated_at` como `readOnly` en las respuestas; `created_by`/
+  `updated_by` visibles para roles autorizados.
+
+**Otras reglas de persistencia** (prácticas heredadas):
+- **Campos de solo lectura protegidos:** no editables directamente vía API (p. ej. `status` de
+  un dispositivo cambia por baja lógica, no por edición directa).
+- **Migraciones versionadas:** Java → **Flyway**; Python → **Alembic**. El esquema evoluciona
+  solo por migraciones versionadas (nunca a mano).
+- **Integridad referencial y reglas de negocio en la capa de servicio**, no solo en la BD.
+- **Datos de referencia sembrados de forma idempotente** por la aplicación, no por scripts manuales.
+
+---
+
 ## 📒 Registro de lecciones (vivo)
 
 | ID | Lección (regla a futuro) | Origen | Alcance |
@@ -195,3 +231,4 @@ codigo/backend/<servicio>/
 | L01 | Definir si "reconocer alerta" excluye al rol Auditor antes de implementar `alerting-service` | Revisión de contratos Fase A | global |
 | L02 | Capturar `running-config` **y** `startup-config` y escalar su divergencia (`unsavedChanges`) | ADR-02 | global |
 | L03 | Búsqueda de texto insensible a acentos, no solo a mayúsculas (`unaccent`, no solo `LOWER()`) | Práctica heredada (Almacenes) | global |
+| L04 | Toda entidad persistida lleva columnas de auditoría auto-pobladas (`created_at/by`, `updated_at/by`); definir el patrón antes de crear la primera entidad | Revisión de diseño (ADR-07) | global |
