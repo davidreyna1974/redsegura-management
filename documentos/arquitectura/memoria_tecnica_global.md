@@ -5,7 +5,7 @@
 > decisiones transversales nuevas. Conciso: **decisiones y contratos, no tutoriales**.
 > Requerimientos (RF/RNF) y matriz RBAC completa: `../proyecto_microservicios_redsegura.md`.
 
-**Versión:** 0.3.0 · **Última actualización:** 2026-07-12 · **Estado:** en desarrollo (Fase A)
+**Versión:** 0.4.0 · **Última actualización:** 2026-07-12 · **Estado:** en desarrollo (Fase A)
 
 ---
 
@@ -59,6 +59,7 @@
 | ADR-09 | **Fiabilidad y concurrencia HTTP:** `Idempotency-Key` en escrituras + `ETag`/`If-Match` (RFC 7232) | Sin idempotencia (duplicados por reintento) / *lost updates* | POST de creación acepta `Idempotency-Key` (deduplica reintentos); GET devuelve `ETag`, y `PUT/PATCH/DELETE` exigen `If-Match` → mapea el bloqueo optimista (`@Version`) al protocolo HTTP. Global |
 | ADR-10 | **Health probes diferenciados** liveness / readiness / startup | `/health` único | `GET /health/liveness` (¿el proceso vive?), `/health/readiness` (¿listo para tráfico: BD/broker OK?), startup. Spring Actuator *health groups* / equivalente FastAPI. Requisito de Kubernetes (no enrutar hasta readiness). Global |
 | ADR-11 | **Seguridad de datos:** redacción de campos sensibles por rol (server-side) + **log de auditoría de seguridad** (OWASP A09) | Confiar en ocultar en cliente / sin traza de seguridad | Matriz campo×rol aplicada en el servidor (p. ej. `mgmtIp` enmascarada para Auditor); log estructurado marca `security` de accesos denegados (403), autenticaciones fallidas y mutaciones con actor. Global |
+| ADR-12 | **Gobernanza de contratos con Spectral en CI** | Consistencia manual / solo revisión | `.spectral.yaml` codifica los estándares OpenAPI (ADR-08..11) como reglas verificables; un workflow los aplica a **todo** `openapi.yaml` en cada push/PR y **falla el gate** si un contrato (Fase A o B) no cumple. Enforcement automático en vez de disciplina; garantiza consistencia al crecer a 10 servicios |
 
 > Las ADR-01/02/03 se originaron en la revisión del plan general
 > (`../planificacion/plan_general_proyecto_redSegura.md` §13) y se consolidan aquí como

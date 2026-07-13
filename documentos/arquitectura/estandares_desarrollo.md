@@ -252,6 +252,12 @@ hasta *readiness*.
   los accesos **denegados** (403), autenticaciones fallidas (401) y las mutaciones con su actor.
   Distinto del log de aplicación y de las columnas de auditoría de datos (ADR-07).
 
+**Gobernanza de contratos (ADR-12):** los estándares OpenAPI anteriores están codificados como
+reglas en `codigo/backend/.spectral.yaml` (Spectral) y se **verifican en CI** sobre todo
+`openapi.yaml` (workflow `contract-governance`). Un contrato — de Fase A o Fase B — que no cumpla
+(p. ej. sin `Problem`/RFC 7807, sin probes, con `ApiError`) **hace fallar el gate**. La consistencia
+entre los 10 microservicios se garantiza por enforcement automático, no por disciplina.
+
 ---
 
 ## 📒 Registro de lecciones (vivo)
