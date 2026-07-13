@@ -2,7 +2,7 @@
 
 **Documento:** Plan de trabajo general (operativiza la especificación del proyecto)
 **Proyecto:** redSegura — Plataforma de Automatización, Monitoreo y Gestión de Vulnerabilidades de Red
-**Versión del documento:** 1.0.0 · **Fecha:** 2026-07-11 · **Última actualización:** 2026-07-11
+**Versión del documento:** 1.1.0 · **Fecha:** 2026-07-11 · **Última actualización:** 2026-07-12
 **Autor:** David Reyna Pineda · **Estado del proyecto:** inicialización (etapa de Fundación)
 
 ---
@@ -106,21 +106,25 @@ cada avance (`pendiente` → `en curso` → `done`).
 
 | # | Tarea | Pre-req | Entregable | Estado |
 |---|---|---|---|---|
-| 0 | Mover `documentos/` a `codigo/management/documentos/` y actualizar rutas en `CLAUDE.md` | — | Reorganización documental (§3) | pendiente |
-| 1 | `git init` en `management`; activar git-hook (`core.hooksPath=.githooks`); crear rama `develop` | 0 | Repositorio `management` versionado | pendiente |
-| 2 | **Plan general del proyecto** (este documento), desde `plan_trabajo_TEMPLATE.md` | 1 | `management/documentos/planificacion/plan_general_proyecto_redSegura.md` | **en curso** |
-| 3 | Memoria técnica global (visión, decisiones de arquitectura, RBAC, catálogo de contratos) | 2 | `arquitectura/memoria_tecnica_global.md` | pendiente |
-| 4 | Diagrama de arquitectura (Mermaid: capas, despliegue, flujo de eventos) | 2 | `arquitectura/diagrama_arquitectura.md` | pendiente |
-| 5 | Estándares de desarrollo (Java/Spring, Python/FastAPI, Angular; incluye logging estructurado RNF-17) | 2 | `arquitectura/estandares_desarrollo.md` | pendiente |
-| 6 | Especificación de comunicación por eventos (topología RabbitMQ + esquemas JSON) | 3 | `arquitectura/especificaciones/comunicacion_por_eventos.md` | pendiente |
-| 7 | Protocolo de verificación en 4 fases (metodología de QA global) | 2 | `qa/protocolo_verificacion_4_fases.md` | pendiente |
-| 8 | `git init` en `backend`; git-hook; rama `develop`; documentación del repositorio | 0 | Repositorio `backend` versionado | pendiente |
-| 9 | POM padre del monorepo (Java 21, Spring Boot BOM, Checkstyle, Spotless, JaCoCo, Surefire) | 8 | `codigo/backend/pom.xml` | pendiente |
-| 10 | Contratos OpenAPI de Fase A (5 servicios) | 6 | `codigo/backend/<servicio>/openapi.yaml` (×5) | pendiente |
-| 11 | Documentación del repositorio backend (README, CHANGELOG, SECURITY, PR template, Dependabot, esqueleto CI, índice de docs) | 8 | Archivos base del repositorio | pendiente |
-| 12 | Documentación del repositorio management (README raíz del sistema, CHANGELOG, SECURITY, PR template) | 1 | Archivos base del repositorio | pendiente |
-| 13 | Integrar ramas `feature/*` a `develop` con merge `--no-ff` (ambos repositorios) | 3–12 | Historia git limpia y trazable | pendiente |
-| 14 | **PAUSA — autorización del usuario** → crear repositorios remotos en GitHub, configurar *branch protection* y el gatekeeper de CI | 13 | Repositorios remotos protegidos, con CI | pendiente |
+| 0 | Mover `documentos/` a `codigo/management/documentos/` y actualizar rutas en `CLAUDE.md` | — | Reorganización documental (§3) | ✅ done |
+| 1 | `git init` en `management`; activar git-hook (`core.hooksPath=.githooks`); crear rama `develop` | 0 | Repositorio `management` versionado | ✅ done |
+| 2 | **Plan general del proyecto** (este documento), desde `plan_trabajo_TEMPLATE.md` | 1 | `management/documentos/planificacion/plan_general_proyecto_redSegura.md` | ✅ done |
+| 3 | Memoria técnica global (visión, decisiones de arquitectura, RBAC, catálogo de contratos) | 2 | `arquitectura/memoria_tecnica_global.md` | ✅ done |
+| 4 | Diagrama de arquitectura (Mermaid: capas, despliegue, flujo de eventos) | 2 | `arquitectura/diagrama_arquitectura.md` | ✅ done |
+| 5 | Estándares de desarrollo (Java/Spring, Python/FastAPI, Angular; incluye logging estructurado RNF-17) | 2 | `arquitectura/estandares_desarrollo.md` | ✅ done |
+| 6 | Especificación de comunicación por eventos (topología RabbitMQ + esquemas JSON) | 3 | `arquitectura/especificaciones/comunicacion_por_eventos.md` | ✅ done |
+| 7 | Protocolo de verificación en 4 fases (metodología de QA global) | 2 | `qa/protocolo_verificacion_4_fases.md` | ✅ done |
+| 8 | `git init` en `backend`; git-hook; rama `develop`; documentación del repositorio | 0 | Repositorio `backend` versionado | ✅ done |
+| 9 | POM padre del monorepo (Java 21, Spring Boot BOM, Checkstyle, Spotless, JaCoCo, Surefire) | 8 | `codigo/backend/pom.xml` | ✅ done |
+| 10 | Contratos OpenAPI de Fase A (5 servicios) | 6 | `codigo/backend/<servicio>/openapi.yaml` (×5) | ✅ done |
+| 11 | Documentación del repositorio backend (README, CHANGELOG, SECURITY, PR template, Dependabot, esqueleto CI, índice de docs) | 8 | Archivos base del repositorio | ✅ done |
+| 12 | Documentación del repositorio management (README raíz del sistema, CHANGELOG, SECURITY, PR template) | 1 | Archivos base del repositorio | ✅ done |
+| 13 | Integrar ramas `feature/*` a `develop` con merge `--no-ff` (ambos repositorios) | 3–12 | Historia git limpia y trazable | ✅ done |
+| 14 | **PAUSA — autorización del usuario** → crear repositorios remotos en GitHub, configurar *branch protection* y el gatekeeper de CI | 13 | Repositorios remotos protegidos, con CI | 🕓 en pausa (autorización) |
+
+> **Decisiones añadidas durante la Fundación** (ver §13 y la memoria técnica global): ADR-05
+> (contract-first Java / code-first + check Python), ADR-06 (MapStruct / Pydantic para
+> entidad↔DTO), ADR-07 (columnas de auditoría estándar).
 
 ---
 
@@ -493,6 +497,7 @@ anterior.
 | Fecha | Avance | Próximo paso |
 |---|---|---|
 | 2026-07-11 | Análisis de la Especificación, `especificaciones_diseño.md`, `anteproyecto`, `CLAUDE.md` y kit de plantillas. Decisiones de Fundación acordadas (reorganización documental, git en backend + management, contratos de Fase A, remotos al cierre). Creado y reforzado este plan general. Registradas ADR-01 y ADR-02 (§13). | Revisión y autorización del usuario → ejecutar la reorganización documental y la arquitectura global (tareas 0–1, 3–7). |
+| 2026-07-12 | Ejecutadas las tareas **0–13**: reorganización documental; `git init` en `management` y `backend` con git-hook anti-commit-directo; arquitectura global (memoria técnica, diagrama, estándares, eventos, protocolo QA); documentación de ambos repos; POM padre (validado); **5 contratos OpenAPI de Fase A** (validados con redocly, 0 errores); merges `--no-ff` a `develop`. Registradas ADR-03..07. Contratos revisados por el usuario. | **Tarea 14 (en pausa):** crear repos remotos en GitHub + branch protection + CI. Luego → construir `asset-inventory-service` (primer microservicio de Fase A). |
 
 ---
 
