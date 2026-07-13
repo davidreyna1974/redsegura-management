@@ -58,7 +58,10 @@ codigo/backend/<servicio>/
 - **Cobertura:** **JaCoCo** ≥ 70 % statements (falla el build si no se alcanza).
 - **Diseño:** inyección **por constructor** (nunca `@Autowired` en campos); DTO ↔ entidad
   explícito (nunca exponer entidades JPA); `@Transactional` en la capa de servicio; validación
-  con Bean Validation (`@Valid`, `@NotNull`…). OpenAPI generado/verificado con `springdoc`.
+  con Bean Validation (`@Valid`, `@NotNull`…).
+- **Contrato (contract-first, ADR-05):** el `openapi.yaml` es la **entrada**; se generan las
+  interfaces de API + DTOs con `openapi-generator-maven-plugin` y el controlador **implementa**
+  la interfaz generada. El código cumple el contrato por construcción.
 
 ### 3.2 Python 3.12 / FastAPI (servicios de automatización de red y seguridad)
 - **Gestión de paquetes:** `pip`/`uv` con dependencias fijadas.
@@ -66,6 +69,10 @@ codigo/backend/<servicio>/
 - **Tipos:** **mypy** en modo estricto; sin `# type: ignore` sin justificación.
 - **Diseño:** DTOs con **Pydantic v2**; inyección de dependencias con `Depends`; capa
   `router → service → repository`; nunca exponer modelos ORM directamente.
+- **Contrato (code-first + check de divergencia, ADR-05):** FastAPI genera su OpenAPI **desde el
+  código**; el `openapi.yaml` comprometido es el contrato de diseño. En CI se compara el OpenAPI
+  que produce el servicio (`app.openapi()`) contra el `openapi.yaml`; si divergen, el gate
+  **falla**. Los modelos Pydantic pueden sembrarse desde el YAML con `datamodel-code-generator`.
 
 ### 3.3 Angular (dashboard — repo `frontend`)
 - **Lint + formato:** **ESLint + Prettier**; TypeScript en modo **strict**.
