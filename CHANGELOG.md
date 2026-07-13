@@ -17,7 +17,10 @@ versionado según [SemVer](https://semver.org/lang/es/).
 - Decisiones de arquitectura registradas: ADR-01 (almacenamiento Git+PostgreSQL de respaldos),
   ADR-02 (running/startup + `unsavedChanges`), ADR-03 (canales de notificación enchufables),
   ADR-04 (transactional outbox), ADR-05 (contract-first Java / code-first + check Python),
-  ADR-06 (MapStruct / Pydantic para entidad↔DTO), ADR-07 (columnas de auditoría estándar).
+  ADR-06 (MapStruct / Pydantic para entidad↔DTO), ADR-07 (columnas de auditoría estándar),
+  ADR-08 (RFC 7807 Problem Details + JSON Merge Patch), ADR-09 (Idempotency-Key + ETag/If-Match),
+  ADR-10 (health probes liveness/readiness), ADR-11 (redacción por rol + log de auditoría de
+  seguridad), ADR-12 (gobernanza de contratos con Spectral en CI).
 - Protocolo de verificación en 4 fases (metodología de QA global).
 - Documentación del repositorio: README raíz del sistema, SECURITY, plantilla de PR, índice de
   documentación.

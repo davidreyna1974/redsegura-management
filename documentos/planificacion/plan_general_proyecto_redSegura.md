@@ -182,11 +182,12 @@ evento, se verifica el contrato real — nunca se asumen nombres de campos ni es
 - **Versionado de ruta:** prefijo `/api/v1`. Un cambio incompatible implica `v2`.
 - **Autenticación:** *Bearer* JWT (OAuth2/OIDC vía Keycloak). Cada endpoint declara sus
   roles permitidos (`security`), y la autorización se valida **en el propio servicio**.
-- **Modelo de error uniforme (RNF-09):** respuestas de error tipo *problem+json* con
-  `code`, `message` y `traceId`, **sin** filtrar detalles internos (stack traces, nombres
-  de tablas/clases). Códigos: `400` (petición malformada), `401` (no autenticado),
-  `403` (autenticado sin permiso), `404` (no encontrado), `409` (conflicto de estado),
-  `422` (validación de negocio).
+- **Modelo de error uniforme (RFC 7807/9457, ADR-08):** `application/problem+json` con
+  `type`, `title`, `status`, `detail`, `instance` (+ `traceId`), **sin** filtrar detalles
+  internos. Códigos: `400`, `401`, `403`, `404`, `409`, `412` (If-Match no coincide),
+  `422`, `428` (falta If-Match). `PATCH` = JSON Merge Patch (RFC 7386).
+- **Fiabilidad y concurrencia (ADR-09):** `Idempotency-Key` en creaciones; `ETag`/`If-Match`
+  (RFC 7232) en mutaciones.
 - **Paginación estándar** en toda colección: parámetros `page`, `size`, `sort`; respuesta
   con `content`, `page`, `size`, `totalElements`, `totalPages`.
 - **Filtrado en colecciones (criterio general):** todo endpoint que devuelva una lista
@@ -194,9 +195,16 @@ evento, se verifica el contrato real — nunca se asumen nombres de campos ni es
   (p. ej. `hostname`, IP de gestión `mgmtIp`, criticidad, severidad, estado, rango de
   fechas), además de la paginación y el ordenamiento. Los filtros se combinan (AND) y se
   omiten los vacíos. La búsqueda de texto es insensible a mayúsculas/acentos.
-- **Salud:** cada servicio expone `GET /health` (RNF-12) sin autenticación.
-- **Trazabilidad:** se propaga un identificador de correlación (`traceId`) entre servicios
-  (RNF-16).
+- **Health probes (ADR-10):** cada servicio expone `GET /health/liveness` y
+  `GET /health/readiness` (RNF-12) sin autenticación.
+- **Trazabilidad:** se propaga un identificador de correlación (`traceId`) entre servicios (RNF-16).
+- **Gobernanza (ADR-12):** estas reglas se verifican en CI con **Spectral** sobre todo
+  `openapi.yaml`; un contrato que no cumpla hace fallar el gate.
+
+> **Nota:** los contratos OpenAPI (fuente de verdad, `<servicio>/openapi.yaml`) fueron elevados a
+> estándares de industria (ADR-08..12) después de esta sección; `asset-inventory` incorpora además
+> identidad estable (`serialNumber`), `deviceType`, ubicación DCIM, bulk import y redacción de
+> `mgmtIp` por rol. El detalle vigente vive en cada `openapi.yaml`.
 
 ### 7.3 Contratos de API — Fase A (detalle por servicio)
 
