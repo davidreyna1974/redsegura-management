@@ -120,7 +120,11 @@ cada avance (`pendiente` → `en curso` → `done`).
 | 11 | Documentación del repositorio backend (README, CHANGELOG, SECURITY, PR template, Dependabot, esqueleto CI, índice de docs) | 8 | Archivos base del repositorio | ✅ done |
 | 12 | Documentación del repositorio management (README raíz del sistema, CHANGELOG, SECURITY, PR template) | 1 | Archivos base del repositorio | ✅ done |
 | 13 | Integrar ramas `feature/*` a `develop` con merge `--no-ff` (ambos repositorios) | 3–12 | Historia git limpia y trazable | ✅ done |
-| 14 | **PAUSA — autorización del usuario** → crear repositorios remotos en GitHub, configurar *branch protection* y el gatekeeper de CI | 13 | Repositorios remotos protegidos, con CI | 🕓 en pausa (autorización) |
+| 14 | Crear repositorios remotos en GitHub, configurar *branch protection* y el gatekeeper de CI | 13 | Repositorios remotos protegidos, con CI | ✅ done |
+
+**Repositorios remotos** (públicos): `github.com/davidreyna1974/redsegura-management` ·
+`github.com/davidreyna1974/redsegura-backend`. Branch protection: `main` requiere Pull Request
+(aplicado a admins, sin force-push/borrado); `develop` con historial protegido y push permitido.
 
 > **Decisiones añadidas durante la Fundación** (ver §13 y la memoria técnica global): ADR-05
 > (contract-first Java / code-first + check Python), ADR-06 (MapStruct / Pydantic para
@@ -498,6 +502,7 @@ anterior.
 |---|---|---|
 | 2026-07-11 | Análisis de la Especificación, `especificaciones_diseño.md`, `anteproyecto`, `CLAUDE.md` y kit de plantillas. Decisiones de Fundación acordadas (reorganización documental, git en backend + management, contratos de Fase A, remotos al cierre). Creado y reforzado este plan general. Registradas ADR-01 y ADR-02 (§13). | Revisión y autorización del usuario → ejecutar la reorganización documental y la arquitectura global (tareas 0–1, 3–7). |
 | 2026-07-12 | Ejecutadas las tareas **0–13**: reorganización documental; `git init` en `management` y `backend` con git-hook anti-commit-directo; arquitectura global (memoria técnica, diagrama, estándares, eventos, protocolo QA); documentación de ambos repos; POM padre (validado); **5 contratos OpenAPI de Fase A** (validados con redocly, 0 errores); merges `--no-ff` a `develop`. Registradas ADR-03..07. Contratos revisados por el usuario. | **Tarea 14 (en pausa):** crear repos remotos en GitHub + branch protection + CI. Luego → construir `asset-inventory-service` (primer microservicio de Fase A). |
+| 2026-07-12 | **Tarea 14 completada → FUNDACIÓN CERRADA.** Repos remotos públicos creados (`redsegura-management`, `redsegura-backend`), `main`+`develop` publicados, branch protection configurada, workflow de contract-tests en verde. | **Construir `asset-inventory-service`** (primer microservicio de Fase A): propuesta de módulo + casos de prueba (pre-código) → scaffolding → implementación → gatekeeper ≥70%. |
 
 ---
 
