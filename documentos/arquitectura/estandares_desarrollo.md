@@ -268,3 +268,4 @@ entre los 10 microservicios se garantiza por enforcement automático, no por dis
 | L02 | Capturar `running-config` **y** `startup-config` y escalar su divergencia (`unsavedChanges`) | ADR-02 | global |
 | L03 | Búsqueda de texto insensible a acentos, no solo a mayúsculas (`unaccent`, no solo `LOWER()`) | Práctica heredada (Almacenes) | global |
 | L04 | Toda entidad persistida lleva columnas de auditoría auto-pobladas (`created_at/by`, `updated_at/by`); definir el patrón antes de crear la primera entidad | Revisión de diseño (ADR-07) | global |
+| L05 | Cada microservicio incluye en su propuesta una "Revisión contra estándares de industria" (§8 de la plantilla): confirmar cumplimiento de los estándares **globales** (heredados/gobernados) + analizar los **específicos de su dominio**; promover a ADR global cualquier hallazgo transversal | Revisión de `asset-inventory` que originó ADR-08..12 | global |

@@ -52,12 +52,36 @@ Interfaces/DTOs relevantes:
 - <decisión> porque <motivo>.
 - <riesgo> → <mitigación>.
 
-## 8. Checklist de apertura (antes de codificar)
+## 8. Revisión contra estándares de industria
+
+<!-- GUÍA: paso corto y REPETIBLE. NO re-derivar los estándares globales (ya son ADR + gobernados
+     por CI): solo confirmar cumplimiento. El foco real es el análisis de estándares ESPECÍFICOS
+     del DOMINIO de este servicio. Un hallazgo transversal nuevo se PROMUEVE a ADR global (+ regla
+     de gobernanza) para que beneficie a todos y no se re-descubra. -->
+
+**a) Cumplimiento de estándares globales** (heredados; la mayoría los verifica el gatekeeper /
+gobernanza Spectral — aquí solo se confirma):
+```
+[ ] Errores RFC 7807 · [ ] probes liveness/readiness · [ ] Idempotency-Key en creaciones
+[ ] ETag/If-Match en mutaciones · [ ] columnas de auditoría · [ ] redacción de campos por rol
+[ ] paginación y filtrado estándar · [ ] RBAC por operación · [ ] logging estructurado
+```
+
+**b) Estándares específicos del DOMINIO de este servicio** (el análisis que sí cambia por servicio):
+
+| Estándar/patrón del dominio | ¿Aplica? | Cómo se incorpora / decisión |
+|---|---|---|
+| <p. ej. CVSS/EPSS/KEV · CIS Benchmark/STIG · SNMP/gNMI · ITIL · SCAP…> | sí/no | <...> |
+
+**c) Hallazgos transversales a promover:** <ninguno | proponer ADR-XX + regla de gobernanza>.
+
+## 9. Checklist de apertura (antes de codificar)
 
 ```
 [ ] Propuesta creada (este documento).
 [ ] docs/qa/casos_de_prueba_modulo_<nombre>.md creado desde el TEMPLATE (categorías completas).
 [ ] Memoria técnica de módulo iniciada.
 [ ] Contratos de dependencias verificados (Sección 4).
+[ ] Revisión contra estándares de industria (Sección 8) completada.
 [ ] Gate de seguridad previsto para todas las rutas/endpoints nuevos.
 ```
