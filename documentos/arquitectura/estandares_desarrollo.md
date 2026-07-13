@@ -187,6 +187,18 @@ codigo/backend/<servicio>/
 - OpenAPI desde la primera versión funcional (RNF-27); README, CHANGELOG y diagrama al día como
   parte de "done".
 
+**Documentación en el código (obligatoria):**
+- **Toda clase/tipo** y **todo método público significativo** llevan Javadoc (Java) / docstring
+  (Python) que explica su **propósito e intención** (el *porqué*), no solo el *qué*.
+- Todo **comportamiento no obvio** (algoritmos, máquinas de estado, casos borde, efectos
+  secundarios, decisiones de diseño locales) se comenta en el punto donde ocurre.
+- **No** se documenta lo trivial (getters/setters, `main`, DTOs autogenerados, tests de nombre
+  autoexplicativo). La relajación del Javadoc-obligatorio en Checkstyle es para evitar **ruido**,
+  no para omitir lo significativo.
+- Los **tests referencian el ID del caso de prueba** que cubren (trazabilidad casos↔código).
+- Referencias cruzadas al ADR/RN correspondiente cuando el código materializa una decisión
+  (p. ej. `// RN8: ETag/If-Match` o `(ADR-04)`).
+
 ---
 
 ## 11. Datos y persistencia
@@ -269,3 +281,4 @@ entre los 10 microservicios se garantiza por enforcement automático, no por dis
 | L03 | Búsqueda de texto insensible a acentos, no solo a mayúsculas (`unaccent`, no solo `LOWER()`) | Práctica heredada (Almacenes) | global |
 | L04 | Toda entidad persistida lleva columnas de auditoría auto-pobladas (`created_at/by`, `updated_at/by`); definir el patrón antes de crear la primera entidad | Revisión de diseño (ADR-07) | global |
 | L05 | Cada microservicio incluye en su propuesta una "Revisión contra estándares de industria" (§8 de la plantilla): confirmar cumplimiento de los estándares **globales** (heredados/gobernados) + analizar los **específicos de su dominio**; promover a ADR global cualquier hallazgo transversal | Revisión de `asset-inventory` que originó ADR-08..12 | global |
+| L06 | Documentar en el código el propósito de cada clase y método significativo (Javadoc/docstring) + el comportamiento no obvio; los tests referencian su ID de caso. Relajar Javadoc en Checkstyle NO exime de documentar lo importante | Revisión de documentación del scaffold de `asset-inventory` | global |
