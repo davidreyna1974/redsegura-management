@@ -113,8 +113,13 @@ tarea 10 de la Fundación. Estado: **Fase A definida (contratos por generar); Fa
 ### 4.2 Reglas transversales de API
 - **Versionado de ruta:** prefijo `/api/v1`.
 - **Autenticación:** *Bearer* JWT (Keycloak); autorización por rol validada **en cada servicio**.
-- **Modelo de error uniforme (RNF-09):** *problem+json* con `code`, `message`, `traceId`; sin
-  filtrar internos (stack traces, nombres de tablas/clases). Códigos: 400/401/403/404/409/422.
+- **Modelo de error uniforme (RFC 7807/9457, ADR-08):** `application/problem+json` con
+  `type,title,status,detail,instance` (+ `traceId`); sin filtrar internos. Códigos:
+  400/401/403/404/409/412/422/428. `PATCH` = JSON Merge Patch (RFC 7386).
+- **Fiabilidad/concurrencia (ADR-09):** `Idempotency-Key` en creaciones; `ETag`/`If-Match`
+  (RFC 7232) en mutaciones (→ 412/428).
+- **Health probes (ADR-10):** `/health/liveness` y `/health/readiness` (no autenticados).
+- **Gobernanza (ADR-12):** estos estándares se verifican en CI con Spectral sobre todo `openapi.yaml`.
 - **Paginación estándar** en toda colección:
   ```json
   { "content": [], "page": 0, "size": 20, "totalElements": 0, "totalPages": 0, "first": true, "last": true }
@@ -249,9 +254,10 @@ la capa de servicio, y contratos OpenAPI desde la primera versión (RNF-27).
   (`redsegura-management`, `redsegura-backend`, públicos) con branch protection (`main` requiere
   PR; `develop` con historial protegido). `frontend` sin inicializar.
 - **Documentación de arquitectura:** ✅ completa — plan general, memoria técnica global (este
-  doc, ADR-01..07), diagrama, estándares, especificación de eventos y protocolo de QA.
-- **Contratos:** ✅ 5 contratos OpenAPI de Fase A definidos y validados (redocly, 0 errores);
-  catálogo de eventos definido.
+  doc, **ADR-01..12**), diagrama, estándares, especificación de eventos y protocolo de QA.
+- **Contratos:** ✅ 5 contratos OpenAPI de Fase A definidos, validados y **sintonizados con
+  estándares de industria** (RFC 7807, probes, Idempotency-Key/ETag, ADR-08..11); **gobernados
+  en CI con Spectral** (ADR-12). Catálogo de eventos definido.
 - **Tests / cobertura:** N/A (sin código de servicios). Umbral objetivo: ≥ 70 % statements por servicio.
 
 ---
