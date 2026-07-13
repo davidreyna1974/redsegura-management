@@ -52,6 +52,7 @@
 | ADR-02 | **Respaldo de `running-config` + `startup-config`** con flag `unsavedChanges` y **escalamiento por evento** | Solo running-config | Detecta cambios sin guardar; escala vía `config.unsaved_changes_detected` (regla configurable en alerting) |
 | ADR-03 | **Canales de notificación enchufables** (adapter/strategy) | Canales cableados | Email + Telegram como adaptadores MVP (RF-32); nuevos canales sin refactor |
 | ADR-04 | **Transactional outbox** para publicar eventos al broker | Publicación directa (dual write) | Consistencia BD↔RabbitMQ: el evento se publica solo si la transacción de BD confirmó. Ver `especificaciones/comunicacion_por_eventos.md` |
+| ADR-05 | **Contract-first en Java** (openapi-generator) y **code-first + check de divergencia en Python** (FastAPI) | Code-first uniforme (springdoc/FastAPI) / contract-first uniforme | Java genera interfaces+DTOs desde el `openapi.yaml` (cumple el contrato por construcción); Python genera su OpenAPI desde el código y CI lo compara contra el `openapi.yaml` comprometido (falla si divergen). Mantiene el `openapi.yaml` como fuente de verdad en ambos stacks |
 
 > Las ADR-01/02/03 se originaron en la revisión del plan general
 > (`../planificacion/plan_general_proyecto_redSegura.md` §13) y se consolidan aquí como
