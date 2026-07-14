@@ -255,6 +255,10 @@ la capa de servicio, y contratos OpenAPI desde la primera versión (RNF-27).
 - **Repositorios:** `management` y `backend` versionados y **publicados en GitHub**
   (`redsegura-management`, `redsegura-backend`, públicos) con branch protection (`main` requiere
   PR; `develop` con historial protegido). `frontend` sin inicializar.
+- **CI/CD:** CI de `asset-inventory-service` **activo** (push/PR con filtro por rutas); el gatekeeper
+  (`mvn verify`: build + tests Testcontainers + cobertura + lint) corre en GitHub Actions (JDK 21,
+  actions `@v5`) y es **status check requerido** en `main` (bloquea merges rojos). Nota monorepo:
+  al sumar servicios, añadir un check "paraguas" para PRs que no toquen `asset-inventory`.
 - **Documentación de arquitectura:** ✅ completa — plan general, memoria técnica global (este
   doc, **ADR-01..12**), diagrama, estándares, especificación de eventos y protocolo de QA.
 - **Contratos:** ✅ 5 contratos OpenAPI de Fase A definidos, validados y **sintonizados con
