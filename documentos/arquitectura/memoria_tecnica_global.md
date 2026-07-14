@@ -248,8 +248,9 @@ la capa de servicio, y contratos OpenAPI desde la primera versión (RNF-27).
 
 ## 8. Estado del proyecto y métricas
 
-- **Fase:** Fundación **completa**; inicia la construcción de Fase A. Ningún microservicio
-  implementado todavía.
+- **Fase:** Fundación **completa**; Fase A **en construcción**. `asset-inventory-service` en curso
+  (dominio + CRUD + búsqueda/filtros + seguridad RBAC + ETag/If-Match + idempotencia endurecida +
+  auditoría de capacidad productiva); resto de servicios sin iniciar.
 - **Repositorios:** `management` y `backend` versionados y **publicados en GitHub**
   (`redsegura-management`, `redsegura-backend`, públicos) con branch protection (`main` requiere
   PR; `develop` con historial protegido). `frontend` sin inicializar.
@@ -258,7 +259,8 @@ la capa de servicio, y contratos OpenAPI desde la primera versión (RNF-27).
 - **Contratos:** ✅ 5 contratos OpenAPI de Fase A definidos, validados y **sintonizados con
   estándares de industria** (RFC 7807, probes, Idempotency-Key/ETag, ADR-08..11); **gobernados
   en CI con Spectral** (ADR-12). Catálogo de eventos definido.
-- **Tests / cobertura:** N/A (sin código de servicios). Umbral objetivo: ≥ 70 % statements por servicio.
+- **Tests / cobertura:** `asset-inventory-service` — **40 tests** en verde (unit + Testcontainers +
+  MockMvc), cobertura ≥ 70 % statements, 0 Checkstyle. Resto de servicios: N/A. Umbral: ≥ 70 %.
 
 ---
 
@@ -268,6 +270,7 @@ la capa de servicio, y contratos OpenAPI desde la primera versión (RNF-27).
 |---|---|---|---|
 | L01 | Resolver explícitamente si "reconocer alerta" excluye al rol Auditor (la matriz §5 lo permite, pero Auditor es solo lectura) | Revisión de contratos de Fase A | Decisión a fijar antes de implementar `alerting-service`; ajustar contrato y matriz si aplica |
 | L02 | En dispositivos de red, `running-config` ≠ `startup-config` implica cambios sin guardar: capturar ambas y escalar la divergencia | ADR-02 | `config-backup-service` y política futura de `compliance-audit-service` |
+| L03 | **Capacidad productiva real** (no solo portafolio): (a) un parámetro del contrato sin cablear falla en silencio → test por cada filtro; (b) `readiness` debe verificar dependencias reales (BD), no devolver `UP` fijo; (c) validar entrada libre (`sort`, `size`) **antes** de la capa de datos, para no filtrar internos (RNF-09) ni exponer DoS | Auditoría de `asset-inventory-service` | Checklist de revisión aplicable a **todos** los microservicios antes de cerrar cada módulo |
 
 ---
 
@@ -280,8 +283,15 @@ la capa de servicio, y contratos OpenAPI desde la primera versión (RNF-27).
 - [x] Repos remotos en GitHub + branch protection + esqueleto de CI.
 
 **Fase A — en curso:**
-- [ ] `asset-inventory-service` (primer servicio; propuesta de módulo ✅): casos de prueba →
-  scaffolding → implementación → gatekeeper ≥ 70 %.
+- [~] `asset-inventory-service`: dominio + CRUD + búsqueda/filtros + RBAC + ETag/If-Match +
+  idempotencia endurecida ✅; **pendiente**: redacción `mgmtIp` + log de seguridad (4d), eventos vía
+  outbox (4e), bulk import (4f), completar los 43 casos y activar CI por servicio.
 - [ ] `config-backup-service`, `compliance-audit-service`, `alerting-service`, `notification-service`.
 - [ ] Golden path E2E en Docker Compose.
 - [ ] Trasladar decisiones y lecciones a este documento al cerrar cada módulo.
+
+**Deuda transversal de producción (aplicable a todos los servicios):**
+- [ ] **Observabilidad (RNF-15/16/17):** `micrometer-registry-prometheus` (métricas) + **logging
+  estructurado JSON** — candidato a hito en el POM padre, para no repetirlo servicio a servicio.
+- [ ] **Seguridad JWT:** validación de `issuer`/`audience` (hoy solo firma) vía `OAuth2TokenValidator`,
+  al fijar el realm de Keycloak.
