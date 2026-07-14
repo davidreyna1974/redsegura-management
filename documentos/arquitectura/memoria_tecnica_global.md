@@ -264,7 +264,7 @@ la capa de servicio, y contratos OpenAPI desde la primera versión (RNF-27).
 - **Contratos:** ✅ 5 contratos OpenAPI de Fase A definidos, validados y **sintonizados con
   estándares de industria** (RFC 7807, probes, Idempotency-Key/ETag, ADR-08..11); **gobernados
   en CI con Spectral** (ADR-12). Catálogo de eventos definido.
-- **Tests / cobertura:** `asset-inventory-service` — **50 tests** en verde (unit + Testcontainers
+- **Tests / cobertura:** `asset-inventory-service` — **57 tests** en verde (unit + Testcontainers
   PostgreSQL/RabbitMQ + MockMvc), cobertura ≥ 70 % statements, 0 Checkstyle. Resto de servicios: N/A.
   Umbral: ≥ 70 %.
 
@@ -292,8 +292,9 @@ la capa de servicio, y contratos OpenAPI desde la primera versión (RNF-27).
 **Fase A — en curso:**
 - [~] `asset-inventory-service`: dominio + CRUD + búsqueda/filtros + RBAC + ETag/If-Match +
   idempotencia endurecida + redacción `mgmtIp` por rol + 401/403 `problem+json` + log de seguridad
-  (OWASP A09) + observabilidad + **eventos `asset.*` vía transactional outbox** (RN11) ✅;
-  **pendiente**: bulk import (4f), completar los casos y activar CI por servicio.
+  (OWASP A09) + observabilidad + eventos `asset.*` vía transactional outbox (RN11) + **importación
+  masiva asíncrona** (RF-04) + **CI activo/gateando** ✅; **pendiente**: certificación QA de 4 fases,
+  Pact (al existir el primer consumidor).
 - [ ] `config-backup-service`, `compliance-audit-service`, `alerting-service`, `notification-service`.
 - [ ] Golden path E2E en Docker Compose.
 - [ ] Trasladar decisiones y lecciones a este documento al cerrar cada módulo.
