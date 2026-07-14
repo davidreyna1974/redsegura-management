@@ -260,7 +260,7 @@ la capa de servicio, y contratos OpenAPI desde la primera versión (RNF-27).
 - **Contratos:** ✅ 5 contratos OpenAPI de Fase A definidos, validados y **sintonizados con
   estándares de industria** (RFC 7807, probes, Idempotency-Key/ETag, ADR-08..11); **gobernados
   en CI con Spectral** (ADR-12). Catálogo de eventos definido.
-- **Tests / cobertura:** `asset-inventory-service` — **44 tests** en verde (unit + Testcontainers +
+- **Tests / cobertura:** `asset-inventory-service` — **46 tests** en verde (unit + Testcontainers +
   MockMvc), cobertura ≥ 70 % statements, 0 Checkstyle. Resto de servicios: N/A. Umbral: ≥ 70 %.
 
 ---
@@ -293,7 +293,9 @@ la capa de servicio, y contratos OpenAPI desde la primera versión (RNF-27).
 - [ ] Trasladar decisiones y lecciones a este documento al cerrar cada módulo.
 
 **Deuda transversal de producción (aplicable a todos los servicios):**
-- [ ] **Observabilidad (RNF-15/16/17):** `micrometer-registry-prometheus` (métricas) + **logging
-  estructurado JSON** — candidato a hito en el POM padre, para no repetirlo servicio a servicio.
+- [x] **Observabilidad (RNF-15/16/17) — Java:** `micrometer-registry-prometheus` (métricas),
+  `micrometer-tracing-bridge-otel` (traceId/spanId) y `logstash-logback-encoder` (logs JSON) en el
+  **POM padre** + `logback-spring.xml` de referencia. Pendiente: exportadores por entorno (OTLP→Jaeger,
+  scrape Prometheus), extraer `logback-spring.xml` a un módulo commons, y el equivalente en Python.
 - [ ] **Seguridad JWT:** validación de `issuer`/`audience` (hoy solo firma) vía `OAuth2TokenValidator`,
   al fijar el realm de Keycloak.
