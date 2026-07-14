@@ -247,9 +247,13 @@ Todos los eventos comparten esta estructura; lo específico va en `payload`.
 
 ## 8. Plan de implementación
 
-- [ ] Declarar exchange, colas, bindings y DLX/DLQ de forma idempotente al arranque de cada servicio.
-- [ ] Implementar el sobre común y la (de)serialización con `eventId`/`version`/`traceId`.
-- [ ] Implementar transactional outbox en cada productor.
+- [~] Declarar exchange, colas, bindings y DLX/DLQ de forma idempotente al arranque de cada servicio.
+  *(Productor `asset-inventory`: declara el exchange `redsegura.events` durable. Colas/bindings/DLQ
+  los declaran los consumidores — pendientes.)*
+- [x] Implementar el sobre común y la (de)serialización con `eventId`/`version`/`traceId`.
+  *(Implementado en `asset-inventory` — `OutboxWriter`.)*
+- [~] Implementar transactional outbox en cada productor. *(Hecho en `asset-inventory` (V3 +
+  `OutboxWriter`/`OutboxRelay`); pendiente: publisher confirms y el resto de productores.)*
 - [ ] Implementar consumidores idempotentes con reintento+backoff y DLQ.
 - [ ] Contratos Pact por par productor/consumidor; gate en verde.
 
