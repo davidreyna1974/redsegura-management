@@ -273,6 +273,7 @@ la capa de servicio, y contratos OpenAPI desde la primera versión (RNF-27).
 | L01 | Resolver explícitamente si "reconocer alerta" excluye al rol Auditor (la matriz §5 lo permite, pero Auditor es solo lectura) | Revisión de contratos de Fase A | Decisión a fijar antes de implementar `alerting-service`; ajustar contrato y matriz si aplica |
 | L02 | En dispositivos de red, `running-config` ≠ `startup-config` implica cambios sin guardar: capturar ambas y escalar la divergencia | ADR-02 | `config-backup-service` y política futura de `compliance-audit-service` |
 | L03 | **Capacidad productiva real** (no solo portafolio): (a) un parámetro del contrato sin cablear falla en silencio → test por cada filtro; (b) `readiness` debe verificar dependencias reales (BD), no devolver `UP` fijo; (c) validar entrada libre (`sort`, `size`) **antes** de la capa de datos, para no filtrar internos (RNF-09) ni exponer DoS | Auditoría de `asset-inventory-service` | Checklist de revisión aplicable a **todos** los microservicios antes de cerrar cada módulo |
+| L04 | Un gate de calidad (spotless/checkstyle) que solo está en `pluginManagement` **no se ejecuta** en `mvn verify`; hay que **ligarlo a una fase**. Se detectó al activar el CI (que sí corría el goal explícito) → violaciones de formato acumuladas | Activación del CI de `asset-inventory` | `spotless:check` + `checkstyle:check` ligados a `verify` en el POM padre; `mvn verify` es el gatekeeper único; el CI corre solo `verify` |
 
 ---
 
