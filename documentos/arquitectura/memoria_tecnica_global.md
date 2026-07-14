@@ -250,7 +250,8 @@ la capa de servicio, y contratos OpenAPI desde la primera versión (RNF-27).
 
 - **Fase:** Fundación **completa**; Fase A **en construcción**. `asset-inventory-service` en curso
   (dominio + CRUD + búsqueda/filtros + seguridad RBAC + ETag/If-Match + idempotencia endurecida +
-  auditoría de capacidad productiva); resto de servicios sin iniciar.
+  redacción `mgmtIp` por rol + log de seguridad + auditoría de capacidad productiva); resto de
+  servicios sin iniciar.
 - **Repositorios:** `management` y `backend` versionados y **publicados en GitHub**
   (`redsegura-management`, `redsegura-backend`, públicos) con branch protection (`main` requiere
   PR; `develop` con historial protegido). `frontend` sin inicializar.
@@ -259,7 +260,7 @@ la capa de servicio, y contratos OpenAPI desde la primera versión (RNF-27).
 - **Contratos:** ✅ 5 contratos OpenAPI de Fase A definidos, validados y **sintonizados con
   estándares de industria** (RFC 7807, probes, Idempotency-Key/ETag, ADR-08..11); **gobernados
   en CI con Spectral** (ADR-12). Catálogo de eventos definido.
-- **Tests / cobertura:** `asset-inventory-service` — **40 tests** en verde (unit + Testcontainers +
+- **Tests / cobertura:** `asset-inventory-service` — **44 tests** en verde (unit + Testcontainers +
   MockMvc), cobertura ≥ 70 % statements, 0 Checkstyle. Resto de servicios: N/A. Umbral: ≥ 70 %.
 
 ---
@@ -284,8 +285,9 @@ la capa de servicio, y contratos OpenAPI desde la primera versión (RNF-27).
 
 **Fase A — en curso:**
 - [~] `asset-inventory-service`: dominio + CRUD + búsqueda/filtros + RBAC + ETag/If-Match +
-  idempotencia endurecida ✅; **pendiente**: redacción `mgmtIp` + log de seguridad (4d), eventos vía
-  outbox (4e), bulk import (4f), completar los 43 casos y activar CI por servicio.
+  idempotencia endurecida + redacción `mgmtIp` por rol + 401/403 `problem+json` + log de seguridad
+  (OWASP A09) ✅; **pendiente**: eventos vía outbox (4e), bulk import (4f), completar los casos y
+  activar CI por servicio.
 - [ ] `config-backup-service`, `compliance-audit-service`, `alerting-service`, `notification-service`.
 - [ ] Golden path E2E en Docker Compose.
 - [ ] Trasladar decisiones y lecciones a este documento al cerrar cada módulo.
