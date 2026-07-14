@@ -131,6 +131,13 @@ codigo/backend/<servicio>/
 - **Implementación:** Java → Logback con encoder JSON (`logstash-logback-encoder`) + Micrometer
   Tracing (OpenTelemetry). Python → logging con formateador JSON (p. ej. `structlog`) +
   instrumentación OpenTelemetry.
+- **Referencia (Java, ya implementado y heredado por todos los servicios):** las dependencias
+  (`micrometer-registry-prometheus`, `micrometer-tracing-bridge-otel`, `logstash-logback-encoder`)
+  viven en el **POM padre** (`codigo/backend/pom.xml`), y la config JSON en
+  `<servicio>/src/main/resources/logback-spring.xml` (plantilla en `asset-inventory-service`, a
+  extraer a un módulo commons con el segundo servicio). El exportador OTLP a Jaeger y el scrape de
+  Prometheus se activan por entorno. En tests, Spring Boot desactiva métricas/tracing por defecto →
+  usar `@AutoConfigureObservability` para verificarlos.
 
 **Métricas y trazas:**
 - Métricas expuestas para **Prometheus** (Micrometer en Java; cliente Prometheus/OTel en
