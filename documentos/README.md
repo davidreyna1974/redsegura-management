@@ -17,11 +17,14 @@
 | [Estándares de desarrollo](arquitectura/estandares_desarrollo.md) | Convenciones por stack (Java/Python/Angular), logging, pruebas. | ✅ |
 | [Comunicación por eventos](arquitectura/especificaciones/comunicacion_por_eventos.md) | Topología RabbitMQ y esquema JSON de cada evento. | ✅ |
 
-## ✅ Calidad (QA)
+## ✅ Calidad (QA) y aceptación (UAT)
 | Documento | Contenido | Estado |
 |---|---|---|
-| [Protocolo de 4 fases](qa/protocolo_verificacion_4_fases.md) | Metodología de QA global. | ✅ |
+| [Estrategia de pruebas](qa/estrategia_de_pruebas.md) | Capas de test por servicio (Testcontainers, conformidad de contrato, BDD), contratos compartidos, consideraciones por servicio. | ✅ |
+| [Protocolo de 4 fases](qa/protocolo_verificacion_4_fases.md) | Metodología de QA técnica. | ✅ |
 | [Reporte de QA](qa/reporte_qa.md) | Resultado consolidado de certificación por servicio (`asset-inventory` R1 ✅). | ✅ |
+| [Plan de UAT](uat/plan_uat.md) | Aceptación con el cliente (criterios por RF, BDD/Gherkin, avance de negocio). | ✅ |
+| [UAT · asset-inventory](uat/uat_asset-inventory-service.md) | Criterios de aceptación + avance de negocio del 1.º servicio. | ✅ |
 
 ## 📦 Despliegue
 | Documento | Contenido | Estado |

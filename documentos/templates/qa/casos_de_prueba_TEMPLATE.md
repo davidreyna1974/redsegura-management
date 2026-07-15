@@ -45,6 +45,24 @@
 | VAL-01 | <...> | VAL | Campo obligatorio vacío | <...> | Error inline, no envía | ⏳ | |
 | CYBER-01 | <...> | CYBER | Parámetro malformado | <...> | 400 sin filtrar tipos internos | ⏳ | |
 
+### Conformidad de contrato (obligatorio si el servicio expone API o publica eventos)
+<!-- GUÍA: ver estrategia_de_pruebas.md §1-§2. Los esquemas de eventos viven en la ubicación
+     compartida codigo/backend/contracts/events/. -->
+
+| ID | Cat. | Descripción | Resultado esperado | Estado |
+|---|---|---|---|---|
+| EVT-01 | happy | cada evento emitido valida contra su JSON Schema | 0 errores de schema | ⏳ |
+| EVT-02 | edge | variantes válidas (campos opcionales, formas alternas) | validan | ⏳ |
+| EVT-03 | sad | (1) operación fallida no emite evento; (2) payload malformado rechazado | invariante + schema con dientes | ⏳ |
+
+### Aceptación (BDD) — base de la UAT
+<!-- GUÍA: escenarios Gherkin en <servicio>/src/test/resources/features/, en lenguaje de negocio;
+     automatizados (Cucumber/behave) y aprobados por el cliente. Ver plan_uat.md. -->
+
+| ID | Descripción (escenario de negocio) | Estado |
+|---|---|---|
+| UAT-01 | <escenario del RF principal en lenguaje de negocio> | ⏳ |
+
 ## Patrones que han causado bugs reales (revisar siempre)
 
 - Botón de guardar en edición habilitado sin cambios → exigir formulario "dirty".

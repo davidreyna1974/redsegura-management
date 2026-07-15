@@ -176,8 +176,10 @@ codigo/backend/<servicio>/
 - **Cobertura mínima 70 % statements** por microservicio; seguridad y reglas de negocio con
   prioridad.
 - **Taxonomía:** unit (JUnit 5 / pytest) · integración con **Testcontainers** (PostgreSQL/
-  RabbitMQ reales, sin mocks) · **contract testing (Pact)** para contratos compartidos · E2E
-  (Playwright, repo frontend).
+  RabbitMQ reales, sin mocks) · **conformidad de contrato** (API vs `openapi.yaml`; eventos vs su
+  **JSON Schema compartido** en `codigo/backend/contracts/events/`) · **aceptación BDD** (Cucumber/
+  behave, Gherkin en español — base de la UAT) · **contract testing (Pact)** cuando exista el par
+  consumidor/productor · E2E (Playwright, repo frontend). **Detalle:** [`../qa/estrategia_de_pruebas.md`](../qa/estrategia_de_pruebas.md).
 - Tests **deterministas** (sin dependencia de orden/tiempo real); datos de prueba prefijados y
   limpiados; usuarios de prueba permanentes por rol.
 - **Pruebas de seguridad server-side por rol:** verificar enforcement de RBAC y redacción de
