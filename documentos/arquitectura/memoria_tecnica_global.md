@@ -5,8 +5,8 @@
 > decisiones transversales nuevas. Conciso: **decisiones y contratos, no tutoriales**.
 > Requerimientos (RF/RNF) y matriz RBAC completa: `../proyecto_microservicios_redsegura.md`.
 
-**Versión:** 0.5.0 · **Última actualización:** 2026-07-14 · **Estado:** en desarrollo (Fase A —
-`asset-inventory-service` implementado; CI activo)
+**Versión:** 0.6.1 · **Última actualización:** 2026-07-14 · **Estado:** en desarrollo (Fase A —
+`asset-inventory-service` implementado, incl. RF-05a dual-stack IPv4/IPv6; CI activo)
 
 ---
 
@@ -61,6 +61,7 @@
 | ADR-10 | **Health probes diferenciados** liveness / readiness / startup | `/health` único | `GET /health/liveness` (¿el proceso vive?), `/health/readiness` (¿listo para tráfico: BD/broker OK?), startup. Spring Actuator *health groups* / equivalente FastAPI. Requisito de Kubernetes (no enrutar hasta readiness). Global |
 | ADR-11 | **Seguridad de datos:** redacción de campos sensibles por rol (server-side) + **log de auditoría de seguridad** (OWASP A09) | Confiar en ocultar en cliente / sin traza de seguridad | Matriz campo×rol aplicada en el servidor (p. ej. `mgmtIp` enmascarada para Auditor); log estructurado marca `security` de accesos denegados (403), autenticaciones fallidas y mutaciones con actor. Global |
 | ADR-12 | **Gobernanza de contratos con Spectral en CI** | Consistencia manual / solo revisión | `.spectral.yaml` codifica los estándares OpenAPI (ADR-08..11) como reglas verificables; un workflow los aplica a **todo** `openapi.yaml` en cada push/PR y **falla el gate** si un contrato (Fase A o B) no cumple. Enforcement automático en vez de disciplina; garantiza consistencia al crecer a 10 servicios |
+| ADR-13 | **Direccionamiento de gestión dual-stack** (IPv4/IPv6) modelado tipo IPAM (RF-05a) | Un solo `mgmtIp` string IPv4 | El dispositivo tiene `managementIpv4` y/o `managementIpv6` (al estilo NetBox `primary_ip4`/`primary_ip6`), cada uno con **dirección + prefijo CIDR + gateway**. IPv6 se **canonicaliza** (RFC 5952) antes de persistir para que la unicidad sea real; validación de formato por familia autoritativa en el servidor (`java.net.InetAddress`); redacción por rol enmascara la porción de host de ambas familias (extiende ADR-11). Afecta el contrato y el payload de eventos `asset.*` (→ `version` 1.1.0). Aplica a `asset-inventory`; los consumidores que lean la IP se ajustan |
 
 > Las ADR-01/02/03 se originaron en la revisión del plan general
 > (`../planificacion/plan_general_proyecto_redSegura.md` §13) y se consolidan aquí como
@@ -261,11 +262,11 @@ la capa de servicio, y contratos OpenAPI desde la primera versión (RNF-27).
   actions `@v5`) y es **status check requerido** en `main` (bloquea merges rojos). Nota monorepo:
   al sumar servicios, añadir un check "paraguas" para PRs que no toquen `asset-inventory`.
 - **Documentación de arquitectura:** ✅ completa — plan general, memoria técnica global (este
-  doc, **ADR-01..12**), diagrama, estándares, especificación de eventos y protocolo de QA.
+  doc, **ADR-01..13**), diagrama, estándares, especificación de eventos y protocolo de QA.
 - **Contratos:** ✅ 5 contratos OpenAPI de Fase A definidos, validados y **sintonizados con
   estándares de industria** (RFC 7807, probes, Idempotency-Key/ETag, ADR-08..11); **gobernados
   en CI con Spectral** (ADR-12). Catálogo de eventos definido.
-- **Tests / cobertura:** `asset-inventory-service` — **57 tests** en verde (unit + Testcontainers
+- **Tests / cobertura:** `asset-inventory-service` — **65 tests** en verde (unit + Testcontainers
   PostgreSQL/RabbitMQ + MockMvc), cobertura ≥ 70 % statements, 0 Checkstyle. Resto de servicios: N/A.
   Umbral: ≥ 70 %.
 
@@ -292,10 +293,10 @@ la capa de servicio, y contratos OpenAPI desde la primera versión (RNF-27).
 
 **Fase A — en curso:**
 - [~] `asset-inventory-service`: dominio + CRUD + búsqueda/filtros + RBAC + ETag/If-Match +
-  idempotencia endurecida + redacción `mgmtIp` por rol + 401/403 `problem+json` + log de seguridad
-  (OWASP A09) + observabilidad + eventos `asset.*` vía transactional outbox (RN11) + **importación
-  masiva asíncrona** (RF-04) + **CI activo/gateando** ✅; **pendiente**: certificación QA de 4 fases,
-  Pact (al existir el primer consumidor).
+  idempotencia endurecida + **direccionamiento dual-stack IPv4/IPv6** (RF-05a) + redacción de
+  direcciones por rol + 401/403 `problem+json` + log de seguridad (OWASP A09) + observabilidad +
+  eventos `asset.*` vía transactional outbox (RN11) + importación masiva asíncrona (RF-04) + **CI
+  activo/gateando** ✅; **pendiente**: certificación QA de 4 fases, Pact (al existir el primer consumidor).
 - [ ] `config-backup-service`, `compliance-audit-service`, `alerting-service`, `notification-service`.
 - [ ] Golden path E2E en Docker Compose.
 - [ ] Trasladar decisiones y lecciones a este documento al cerrar cada módulo.
