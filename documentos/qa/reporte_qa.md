@@ -98,3 +98,25 @@ del Gateway). `UI/VIS` → repo `frontend`.
 - Matriz de casos: `codigo/backend/asset-inventory-service/documentos/casos_de_prueba.md`.
 - Memoria técnica del módulo (hitos, decisiones, deuda): `.../documentos/memoria_tecnica.md`.
 - Suite automatizada: `codigo/backend/asset-inventory-service/src/test/**`.
+
+### 9. Verificación en vivo de endpoints (2026-07-15) — post-certificación
+
+Prueba manual/en vivo de los **10 endpoints** por HTTP real (curl / colección Postman) contra el
+**entorno de desarrollo Docker Compose** (servicio empaquetado + PostgreSQL + RabbitMQ + Keycloak
+sembrado). Complementa la certificación automatizada con una pasada de humo sobre el artefacto
+desplegado. **Resultado: 10/10 ✅.** Reporte detallado (tabla por endpoint + dimensiones de
+seguridad + reproducción): [`verificacion_endpoints_asset-inventory.md`](verificacion_endpoints_asset-inventory.md).
+
+- **`HALLAZGO-LIVE-01` (corregido):** `PUT /devices/{id}` no cumplía **reemplazo completo**
+  (RFC 9110) — `replace()` delegaba en la ruta de merge de PATCH y **no nulificaba los campos
+  omitidos**, impidiendo conmutar un dispositivo dual-stack (IPv4+IPv6) a solo-IPv6. **Causa:**
+  `applyUpdate()` compartido por PUT y PATCH aplicaba solo campos no nulos. **La suite no lo
+  detectó** porque `CRUD-04` hacía PUT reenviando el mismo IPv4 (nunca ejercitó un campo omitido).
+  **Fix:** flag `fullReplace` en `applyUpdate` (nulifica opcionales omitidos en PUT; mantiene la
+  invariante RF-05a → 422 si quedaría sin dirección). **Regresión:** `CRUD-04b`/`CRUD-04c`
+  (**98 → 100 tests**). *Blast radius: local* (sin cambio de contrato ni de eventos). Verificado en
+  vivo tras el fix (PUT solo-IPv6 → `managementIpv4: null`, `vendor: null`).
+- **L-QA-04 — PUT vs PATCH no comparten semántica:** PUT (RFC 9110) reemplaza el recurso entero
+  (los campos omitidos se limpian); PATCH (merge, RFC 7386) solo toca lo presente. Un test de PUT
+  debe **ejercitar un campo omitido** y verificar que queda en `null`, no solo reenviar los mismos
+  valores. Aplicar a todos los servicios con endpoints PUT.
