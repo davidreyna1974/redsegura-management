@@ -142,6 +142,9 @@ Todos los eventos comparten esta estructura; lo específico va en `payload`.
 - `asset.updated` incluye además `changedFields: ["criticality", "managementIpv6", ...]`.
 - `asset.decommissioned` puede llevar solo `deviceId`, `hostname`, `status: "BAJA"`.
 - **Consumidores:** config-backup y compliance-audit (para mantener su vista de dispositivos).
+- **Esquema formal + verificación:** el sobre y este payload están formalizados como **JSON Schema**
+  en `backend/asset-inventory-service/src/test/resources/contracts/asset-event.schema.json`, verificado
+  por `AssetEventContractIT` (conformidad productor-side, happy/edge/sad). El sobre va en `version` 1.1.0.
 
 ### 4.2 `config.backup_completed` — publica `config-backup`
 ```json
