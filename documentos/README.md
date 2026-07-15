@@ -21,7 +21,7 @@
 | Documento | Contenido | Estado |
 |---|---|---|
 | [Protocolo de 4 fases](qa/protocolo_verificacion_4_fases.md) | Metodología de QA global. | ✅ |
-| [Reporte de QA](qa/reporte_qa.md) | Resultado consolidado de certificación por servicio. | 🕓 |
+| [Reporte de QA](qa/reporte_qa.md) | Resultado consolidado de certificación por servicio (`asset-inventory` R1 ✅). | ✅ |
 
 ## 📦 Despliegue
 | Documento | Contenido | Estado |

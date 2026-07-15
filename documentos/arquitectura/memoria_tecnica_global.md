@@ -5,8 +5,9 @@
 > decisiones transversales nuevas. Conciso: **decisiones y contratos, no tutoriales**.
 > Requerimientos (RF/RNF) y matriz RBAC completa: `../proyecto_microservicios_redsegura.md`.
 
-**Versión:** 0.6.1 · **Última actualización:** 2026-07-14 · **Estado:** en desarrollo (Fase A —
-`asset-inventory-service` implementado, incl. RF-05a dual-stack IPv4/IPv6; CI activo)
+**Versión:** 0.6.2 · **Última actualización:** 2026-07-14 · **Estado:** en desarrollo (Fase A —
+`asset-inventory-service` implementado y **QA R1 certificada**, incl. RF-05a dual-stack IPv4/IPv6;
+CI activo)
 
 ---
 
@@ -266,7 +267,7 @@ la capa de servicio, y contratos OpenAPI desde la primera versión (RNF-27).
 - **Contratos:** ✅ 5 contratos OpenAPI de Fase A definidos, validados y **sintonizados con
   estándares de industria** (RFC 7807, probes, Idempotency-Key/ETag, ADR-08..11); **gobernados
   en CI con Spectral** (ADR-12). Catálogo de eventos definido.
-- **Tests / cobertura:** `asset-inventory-service` — **65 tests** en verde (unit + Testcontainers
+- **Tests / cobertura:** `asset-inventory-service` — **82 tests** en verde (unit + Testcontainers
   PostgreSQL/RabbitMQ + MockMvc), cobertura ≥ 70 % statements, 0 Checkstyle. Resto de servicios: N/A.
   Umbral: ≥ 70 %.
 
@@ -280,6 +281,7 @@ la capa de servicio, y contratos OpenAPI desde la primera versión (RNF-27).
 | L02 | En dispositivos de red, `running-config` ≠ `startup-config` implica cambios sin guardar: capturar ambas y escalar la divergencia | ADR-02 | `config-backup-service` y política futura de `compliance-audit-service` |
 | L03 | **Capacidad productiva real** (no solo portafolio): (a) un parámetro del contrato sin cablear falla en silencio → test por cada filtro; (b) `readiness` debe verificar dependencias reales (BD), no devolver `UP` fijo; (c) validar entrada libre (`sort`, `size`) **antes** de la capa de datos, para no filtrar internos (RNF-09) ni exponer DoS | Auditoría de `asset-inventory-service` | Checklist de revisión aplicable a **todos** los microservicios antes de cerrar cada módulo |
 | L04 | Un gate de calidad (spotless/checkstyle) que solo está en `pluginManagement` **no se ejecuta** en `mvn verify`; hay que **ligarlo a una fase**. Se detectó al activar el CI (que sí corría el goal explícito) → violaciones de formato acumuladas | Activación del CI de `asset-inventory` | `spotless:check` + `checkstyle:check` ligados a `verify` en el POM padre; `mvn verify` es el gatekeeper único; el CI corre solo `verify` |
+| L05 | Una restricción de contrato en un **parámetro** (`@Max`/`@Min` de query/path) lanza `ConstraintViolationException`, que **sin handler se escapa como 500 con fuga** (viola RNF-09). El límite de paginación debe tener **una sola fuente de verdad** (el contrato), no un cap distinto en código | QA R1 de `asset-inventory` | Manejar `ConstraintViolationException` → 422 `problem+json` en cada servicio; alinear límites contrato↔código. Detalle en `qa/reporte_qa.md` (L-QA-01/02) |
 
 ---
 
@@ -296,7 +298,8 @@ la capa de servicio, y contratos OpenAPI desde la primera versión (RNF-27).
   idempotencia endurecida + **direccionamiento dual-stack IPv4/IPv6** (RF-05a) + redacción de
   direcciones por rol + 401/403 `problem+json` + log de seguridad (OWASP A09) + observabilidad +
   eventos `asset.*` vía transactional outbox (RN11) + importación masiva asíncrona (RF-04) + **CI
-  activo/gateando** ✅; **pendiente**: certificación QA de 4 fases, Pact (al existir el primer consumidor).
+  activo/gateando + **QA R1 ✅ certificada** (82 tests, reporte en `qa/reporte_qa.md`) ✅; **pendiente**:
+  Pact (al existir el primer consumidor).
 - [ ] `config-backup-service`, `compliance-audit-service`, `alerting-service`, `notification-service`.
 - [ ] Golden path E2E en Docker Compose.
 - [ ] Trasladar decisiones y lecciones a este documento al cerrar cada módulo.
