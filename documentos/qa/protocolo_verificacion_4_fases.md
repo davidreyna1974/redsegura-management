@@ -4,7 +4,7 @@
 > re-ejecución, post-fix). Una sola metodología para todo el sistema. Adapta los comandos del
 > gatekeeper al stack del servicio; **la regla fundamental no se cambia**.
 
-**Última actualización:** 2026-07-11 · **Estado:** vigente
+**Última actualización:** 2026-07-15 · **Estado:** vigente
 
 ---
 
@@ -60,10 +60,17 @@ sabe si pasaron sobre el código final o sobre el previo).
   - **Solo una Fase 3 estricta habilita declarar el microservicio CERTIFICADO.**
 - Antes del primer caso, verificar el **congelamiento**: git limpio, dependencias arriba
   (PostgreSQL/RabbitMQ vía Docker/Testcontainers), build vigente (no *stale*).
+- **Verificación en vivo de endpoints (obligatoria):** además de la suite automatizada, ejecutar la
+  pasada manual/en vivo de **todos** los endpoints por HTTP real (curl/Postman) contra el artefacto
+  desplegado en `docker-compose.dev.yml` (auth y dependencias reales). Prueba lo que el harness no
+  cubre (imagen, arranque, config/secretos, JWT reales, red entre contenedores). Ver
+  `estrategia_de_pruebas.md §1b`. Todo hallazgo → Fase 2 + test de regresión automatizado.
 
 ### FASE 4 — Certificación
 - Gatekeeper completo del servicio: build + tests con cobertura **≥ 70 % statements**, 0 fallos,
   lint en verde.
+- **Verificación en vivo de los N/N endpoints ✅** registrada en `qa/verificacion_endpoints_<servicio>.md`
+  (desde `templates/qa/verificacion_endpoints_TEMPLATE.md`).
 - Si el servicio expone/consume un contrato: **Pact en verde** para todos los consumidores.
 - Actualizar el estado de sesión con resultado **CERTIFICADO** y el resumen de cobertura en el
   documento de casos de prueba del servicio.
@@ -104,6 +111,12 @@ sabe si pasaron sobre el código final o sobre el previo).
   breaker y mensaje útil, no *crash* (RNF-10, RNF-11).
 - **Eventos:** publicar → consumir → idempotencia (reproceso sin efecto) → reintento → DLQ tras N fallos.
 - **Búsqueda:** parcial, insensible a mayúsculas y acentos, y caso "sin resultados".
+- **Semántica HTTP:** **PUT = reemplazo completo** (RFC 9110: los campos omitidos se limpian) **vs
+  PATCH = merge** (RFC 7386: solo lo enviado). Un test de PUT debe **ejercitar un campo omitido** y
+  verificar que queda en `null`, no solo reenviar los mismos valores (lección `L-QA-04`).
+- **Verificación en vivo (endpoints):** correr **todos** los endpoints por HTTP real contra el
+  artefacto desplegado (Docker Compose), con JWT reales del IdP — cubre defectos de despliegue,
+  config y semántica HTTP que el harness de test no ve (lección `L-QA-05`).
 
 ---
 

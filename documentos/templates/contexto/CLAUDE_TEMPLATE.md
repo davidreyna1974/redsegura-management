@@ -229,12 +229,17 @@ hasta que TODOS sus casos están en `✅ PASS` con el rol/condición correctos. 
 [ ] La autorización vive en el backend/servidor, no sólo en el cliente.
 ```
 
-**D — Definición de "done" (no ofrecer continuar hasta cumplir las 4):**
+**D — Definición de "done" (no ofrecer continuar hasta cumplirlas todas):**
 ```
 [ ] 1. Todos los casos de prueba en ✅ PASS.
 [ ] 2. Gatekeeper en verde (build + tests + lint) y cobertura ≥ <70>%.
 [ ] 3. Verificación funcional ejecutada y documentada para todos los roles/condiciones.
 [ ] 4. Columna "Estado" del documento de casos completa (ningún ⏳ PENDIENTE).
+[ ] 5. <!-- Si el proyecto expone una API/servicio desplegable: --> Verificación EN VIVO de TODOS
+       los endpoints por HTTP real (curl/Postman) contra el artefacto DESPLEGADO (p. ej. Docker
+       Compose), con auth y dependencias reales → reporte verificacion_endpoints_<servicio>.md
+       (desde qa/verificacion_endpoints_TEMPLATE.md). Complementa —no sustituye— los tests
+       automatizados; cubre despliegue/config/semántica HTTP (PUT=reemplazo completo vs PATCH=merge).
 ```
 
 ---

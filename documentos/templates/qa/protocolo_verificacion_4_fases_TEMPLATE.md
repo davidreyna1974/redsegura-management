@@ -33,9 +33,15 @@
   - *Estricta* = TODOS los casos del módulo, una sesión continua, bundle congelado.
   - **Sólo una Fase 3 estricta habilita declarar el módulo CERTIFICADO.**
 - Antes del primer caso: verificar congelamiento (git limpio, servicios arriba, build vigente — no stale).
+- <!-- Si el módulo expone una API/servicio desplegable: --> **Verificación en vivo de endpoints
+  (obligatoria):** correr TODOS los endpoints por HTTP real (curl/Postman) contra el artefacto
+  **desplegado** (p. ej. Docker Compose), con auth y dependencias reales — cubre defectos de
+  despliegue, config y semántica HTTP (PUT vs PATCH) que el harness de test no ve. Registrar en
+  `verificacion_endpoints_<servicio>.md` (desde `qa/verificacion_endpoints_TEMPLATE.md`).
 
 ### FASE 4 — Certificación
 - `<cmd build>` → 0 errores · `<cmd test --coverage>` → cobertura ≥ <70>%, 0 fallos.
+- <!-- Si aplica: --> **Verificación en vivo de los N/N endpoints ✅** registrada.
 - Actualizar el estado de sesión con resultado **CERTIFICADO**.
 - Actualizar el resumen de cobertura en cada documento de casos afectado.
 - Commit: `chore(qa): verificación completa 4 fases — <fecha>`.

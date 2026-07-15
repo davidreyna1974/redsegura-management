@@ -25,7 +25,7 @@ los estándares y el contexto de Claude Code de cualquier proyecto de software n
 | `contexto/` | `CLAUDE_TEMPLATE.md`, `estandares_desarrollo_TEMPLATE.md` | Al crear el repo (pieza central para Claude Code) |
 | `arquitectura/` | `memoria_tecnica_global_TEMPLATE.md`, `diagrama_arquitectura_TEMPLATE.md`, `especificacion_tecnica_TEMPLATE.md` | Al definir la arquitectura del sistema |
 | `modulos/` | `propuesta_modulo_TEMPLATE.md`, `memoria_tecnica_modulo_TEMPLATE.md` | Antes y durante cada módulo/feature |
-| `qa/` | `casos_de_prueba_TEMPLATE.md`, `protocolo_verificacion_4_fases_TEMPLATE.md`, `reporte_qa_TEMPLATE.md`, `analisis_pruebas_TEMPLATE.md` | Para definir, ejecutar y certificar pruebas |
+| `qa/` | `casos_de_prueba_TEMPLATE.md`, `protocolo_verificacion_4_fases_TEMPLATE.md`, `reporte_qa_TEMPLATE.md`, `analisis_pruebas_TEMPLATE.md`, `verificacion_endpoints_TEMPLATE.md` | Para definir, ejecutar y certificar pruebas (incl. la verificación en vivo de endpoints por servicio) |
 | `planificacion/` | `propuesta_proyecto_TEMPLATE.md`, `plan_trabajo_TEMPLATE.md`, `acta_cierre_proyecto_TEMPLATE.md` | Al inicio del proyecto / de una etapa, y al **cierre formal** |
 | `despliegue/` | `plan_salida_produccion_TEMPLATE.md`, `runbook_despliegue_TEMPLATE.md` | Antes de salir a producción y para operar |
 | `sesiones/` | `estado_sesion_activa_TEMPLATE.md`, `contexto_sesion_siguiente_TEMPLATE.md` | Para no perder contexto entre sesiones de trabajo |

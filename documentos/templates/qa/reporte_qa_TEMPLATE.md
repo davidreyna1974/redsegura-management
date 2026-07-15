@@ -56,6 +56,14 @@ server-side y una suite automatizada de **<N> tests**.
 
 **Resultado: <0 regresiones>.**
 
+<!-- GUÍA: si el servicio expone una API desplegable, añade esta sección. -->
+## 6b. Verificación en vivo de endpoints (<fecha>)
+
+- Prueba manual/en vivo de los **<N/N> endpoints** por HTTP real (curl/Postman) contra el artefacto
+  **desplegado** (Docker Compose), con auth y dependencias reales → **<N/N> ✅**. Reporte detallado:
+  [`verificacion_endpoints_<servicio>.md`](verificacion_endpoints_<servicio>.md).
+- Hallazgos: <ninguno | `HALLAZGO-LIVE-0X` (corregido + test de regresión)>.
+
 ## 7. Lecciones de QA destacadas
 
 <!-- GUÍA: 3-7 lecciones transversales que un revisor valore. -->
