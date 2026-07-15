@@ -13,11 +13,13 @@ resolver, 0 regresiones. Resto de microservicios: sin iniciar.
 
 **Build certificado:** rama `develop` del repo `backend` (Java 21, Spring Boot 3.3.5).
 
-> **R1.1 (re-certificación ligera, 2026-07-15):** tras R1 se añadieron cambios productivos
-> (BSRCH-02 `unaccent`+V6, sobre de evento `version` 1.1.0, extracción del JSON Schema a ubicación
-> compartida) y de test (VAL-04/RN-02, conformidad de eventos, BDD/Cucumber). Al no permanecer el
-> build congelado de R1, se re-sella sobre el `develop` actual: **corrida completa de Fase 3 en
-> verde (98 tests, 0 fallos, cobertura ≥ 70 %, 0 lint)**; sin bugs nuevos → 0 regresiones.
+> **R1.1 — re-certificación estricta completa (4 fases, 2026-07-15):** tras R1 se añadieron cambios
+> productivos (BSRCH-02 `unaccent`+V6, sobre de evento `version` 1.1.0, JSON Schema a ubicación
+> compartida) y de test (VAL-04/RN-02, conformidad de eventos, BDD/Cucumber). Se re-ejecutó el
+> **protocolo de 4 fases íntegro** sobre el `develop` congelado: **Fase 1** inventario (matriz
+> completa: 71 PASS / 2 N/A / 0 diferido; gatekeeper verde) → **Fase 2** sin bugs → **Fase 3**
+> re-ejecución limpia continua (**98 tests, 0 fallos, cobertura ≥ 70 %, 0 lint**) → **Fase 4**
+> certificación. **0 regresiones.**
 
 ### 1. Resumen ejecutivo
 Campaña de QA bajo el Protocolo de 4 fases sobre una versión **congelada** del código. Se verificaron
