@@ -12,7 +12,7 @@
 ## 🏗️ Arquitectura y decisiones
 | Documento | Contenido | Estado |
 |---|---|---|
-| [Memoria técnica global](arquitectura/memoria_tecnica_global.md) | Visión, decisiones (ADR-01..12), contratos, RBAC, lecciones, estado. | ✅ |
+| [Memoria técnica global](arquitectura/memoria_tecnica_global.md) | Visión, decisiones (ADR-01..13), contratos, RBAC, lecciones, estado. | ✅ |
 | [Diagrama de arquitectura](arquitectura/diagrama_arquitectura.md) | Diagramas Mermaid (capas, eventos, golden path, despliegue). | ✅ |
 | [Estándares de desarrollo](arquitectura/estandares_desarrollo.md) | Convenciones por stack (Java/Python/Angular), logging, pruebas. | ✅ |
 | [Comunicación por eventos](arquitectura/especificaciones/comunicacion_por_eventos.md) | Topología RabbitMQ y esquema JSON de cada evento. | ✅ |

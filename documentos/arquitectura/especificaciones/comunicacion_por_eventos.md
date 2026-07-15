@@ -126,7 +126,8 @@ Todos los eventos comparten esta estructura; lo específico va en `payload`.
 {
   "deviceId": "uuid",
   "hostname": "SW1-CORE",
-  "mgmtIp": "10.0.0.11",
+  "managementIpv4": { "address": "10.0.0.11", "prefixLength": 24, "gateway": "10.0.0.1" },
+  "managementIpv6": { "address": "2001:db8:acad:1::11", "prefixLength": 64, "gateway": "2001:db8:acad:1::1" },
   "vendor": "Cisco",
   "model": "Catalyst 9300",
   "location": "Rack A / VLAN 10",
@@ -134,7 +135,11 @@ Todos los eventos comparten esta estructura; lo específico va en `payload`.
   "status": "ACTIVO"              // ACTIVO | BAJA
 }
 ```
-- `asset.updated` incluye además `changedFields: ["criticality", ...]`.
+- **Direccionamiento dual-stack (RF-05a):** el dispositivo lleva **al menos una** de
+  `managementIpv4` / `managementIpv6` (la que no aplique se omite). El `payload` transporta la
+  dirección **en claro** (los consumidores internos la necesitan; la redacción por rol es solo de la
+  API HTTP). Cambio de contrato aditivo → `version` del evento sube a `minor` (1.1.0).
+- `asset.updated` incluye además `changedFields: ["criticality", "managementIpv6", ...]`.
 - `asset.decommissioned` puede llevar solo `deviceId`, `hostname`, `status: "BAJA"`.
 - **Consumidores:** config-backup y compliance-audit (para mantener su vista de dispositivos).
 

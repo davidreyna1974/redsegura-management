@@ -433,11 +433,17 @@ Kubernetes.
 ## 7. Requerimientos Funcionales (RF)
 
 ### 7.1 `asset-inventory-service`
-- **RF-01:** El sistema debe permitir registrar un dispositivo de red con: hostname, IP de gestión, fabricante, modelo, ubicación física/lógica y nivel de criticidad de negocio (alta/media/baja).
+- **RF-01:** El sistema debe permitir registrar un dispositivo de red con: hostname, **dirección(es) de gestión (IPv4 y/o IPv6) con su información complementaria (ver RF-05a)**, fabricante, modelo, ubicación física/lógica y nivel de criticidad de negocio (alta/media/baja).
 - **RF-02:** El sistema debe permitir consultar, editar y dar de baja (soft delete) dispositivos del inventario.
 - **RF-03:** El sistema debe exponer el inventario vía API REST como fuente única de verdad, consumible por los demás microservicios.
-- **RF-04:** El sistema debe permitir búsqueda y filtrado de dispositivos por nombre, IP, ubicación y criticidad.
+- **RF-04:** El sistema debe permitir búsqueda y filtrado de dispositivos por nombre, **dirección de gestión (IPv4 o IPv6)**, ubicación y criticidad.
 - **RF-05:** El sistema debe publicar un evento (`asset.created`, `asset.updated`, `asset.decommissioned`) al message broker ante cada cambio relevante del inventario.
+- **RF-05a (Direccionamiento de gestión dual-stack):** El sistema debe soportar **direccionamiento dual-stack** para la gestión del dispositivo, apegado a estándares de la industria de networking/IPAM (modelo tipo NetBox `primary_ip4`/`primary_ip6`; notación **CIDR**):
+  - El usuario debe poder registrar una **dirección de gestión IPv4**, una **IPv6**, o **ambas**; al menos una es obligatoria.
+  - Cada dirección lleva su **información complementaria**: la propia dirección, el **prefijo de red** (`prefixLength`/máscara CIDR: IPv4 0–32, IPv6 0–128) y, opcionalmente, la **puerta de enlace** (`gateway`) de esa dirección.
+  - Las direcciones IPv6 se **canonicalizan** (forma comprimida estándar, RFC 5952) antes de persistir, de modo que la **unicidad** de la dirección de gestión sea real (dos formas textuales de la misma IPv6 no se consideran distintas).
+  - La **validación** de formato por familia (IPv4/IPv6) y del prefijo es autoritativa en el servidor; el contrato la declara con `format: ipv4`/`ipv6`.
+  - La **redacción por rol** (RNF-09/ADR-11) aplica a ambas familias: para el rol Auditor se enmascara la **porción de host** por debajo del prefijo (p. ej. IPv4 `10.0.0.11/24` → `10.0.0.***`; IPv6 `2001:db8:acad:1::11/64` → `2001:db8:acad:1::***`).
 
 ### 7.2 `config-backup-service`
 - **RF-06:** El sistema debe conectarse vía SSH (Netmiko/NAPALM) a los dispositivos del inventario y respaldar su configuración `running-config`.
