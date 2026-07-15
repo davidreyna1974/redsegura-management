@@ -16,17 +16,17 @@ resolver, 0 regresiones. Resto de microservicios: sin iniciar.
 ### 1. Resumen ejecutivo
 Campaña de QA bajo el Protocolo de 4 fases sobre una versión **congelada** del código. Se verificaron
 **73 casos** en las categorías `SEC, RBAC/AUTHZ, CRUD, VAL, FLOW, RN, ERR, CYBER` (+ direccionamiento
-dual-stack IP, búsqueda, observabilidad), respaldados por una suite automatizada de **82 tests**
+dual-stack IP, búsqueda, observabilidad), respaldados por una suite automatizada de **85 tests**
 (unit + Testcontainers PostgreSQL/RabbitMQ + MockMvc), con verificación por rol (ADM/OPE/AUD) y
 pruebas de seguridad server-side.
 
 | Métrica | Valor |
 |---|---|
 | Casos de prueba | **73** |
-| ✅ PASS | **70** |
+| ✅ PASS | **71** |
 | N/A (justificados) | **2** (RN-05/RN-07, imposibles por construcción) |
-| ⏳ Diferido | **1** (BSRCH-02 búsqueda insensible a acentos — requiere `unaccent`, deuda documentada) |
-| Tests automatizados | **82** · 0 fallos · cobertura ≥ 70 % statements |
+| ⏳ Diferido | **0** (BSRCH-02 se cerró tras la certificación con `unaccent`, Flyway V6) |
+| Tests automatizados | **85** · 0 fallos · cobertura ≥ 70 % statements |
 | Lint/formato | 0 Checkstyle · 0 Spotless |
 | Regresión final | **0 regresiones** |
 
@@ -56,17 +56,21 @@ del Gateway). `UI/VIS` → repo `frontend`.
 *No se hallaron bugs funcionales adicionales.*
 
 ### 5. Verificación de regresión final (2026-07-14)
-- Gatekeeper: `mvn -pl asset-inventory-service -am clean verify` → **82/82 tests**, cobertura ≥ 70 %,
+- Gatekeeper: `mvn -pl asset-inventory-service -am clean verify` → **85/85 tests**, cobertura ≥ 70 %,
   0 Checkstyle, 0 Spotless, sobre JDK 21 (toolchain).
 - CI de GitHub Actions en verde (status check requerido en `main`).
 - **Resultado: 0 regresiones.**
 
 ### 6. Observaciones / deuda al cierre
-- **BSRCH-02 (diferido):** búsqueda insensible a **acentos** — requiere `unaccent` en PostgreSQL; hoy
-  la búsqueda es insensible a mayúsculas. Registrada como deuda funcional menor.
+- **BSRCH-02 — cerrado (post-certificación):** búsqueda insensible a **acentos** implementada con la
+  extensión `unaccent` (Flyway V6) + envoltura `IMMUTABLE`; verificada (`galón` = `galon`). Queda como
+  optimización menor un índice `pg_trgm` para el comodín inicial de los `LIKE %term%`.
+- **VAL-04 / RN-02:** se añadieron los tests 1:1 que faltaban (enum `deviceType` inválido → 400;
+  `hostname` duplicado → 409). Total tras el cierre: **85 tests**.
 - Deuda de producción rastreada en la memoria técnica del módulo (validación `issuer`/`audience` del
-  JWT; exportadores de observabilidad por entorno; publisher confirms del outbox; Pact al existir el
-  primer consumidor).
+  JWT; exportadores de observabilidad por entorno; publisher confirms del outbox; **Pact al existir el
+  primer consumidor** — entretanto se puede añadir conformidad productor-side: validación de respuestas
+  contra el `openapi.yaml` y de eventos contra su JSON Schema).
 
 ### 7. Lecciones de QA
 - **L-QA-01 — una restricción de contrato sin handler es un 500 latente:** los `@Max/@Min` en
