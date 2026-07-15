@@ -5,7 +5,8 @@
 > decisiones transversales nuevas. Conciso: **decisiones y contratos, no tutoriales**.
 > Requerimientos (RF/RNF) y matriz RBAC completa: `../proyecto_microservicios_redsegura.md`.
 
-**Versión:** 0.4.0 · **Última actualización:** 2026-07-12 · **Estado:** en desarrollo (Fase A)
+**Versión:** 0.5.0 · **Última actualización:** 2026-07-14 · **Estado:** en desarrollo (Fase A —
+`asset-inventory-service` implementado; CI activo)
 
 ---
 
