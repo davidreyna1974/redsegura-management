@@ -9,9 +9,19 @@ resolver, 0 regresiones. Resto de microservicios: sin iniciar.
 
 ---
 
-## `asset-inventory-service` — ✅ CERTIFICADO · Ronda R1 (2026-07-14) + re-certificación R1.1 (2026-07-15)
+## `asset-inventory-service` — ✅ CERTIFICADO · R1 (2026-07-14) + R1.1 (2026-07-15) + re-certificación R1.2 (2026-07-15)
 
 **Build certificado:** rama `develop` del repo `backend` (Java 21, Spring Boot 3.3.5).
+
+> **R1.2 — re-certificación estricta completa (4 fases, 2026-07-15):** tras R1.1 se incorporó la
+> **verificación en vivo de endpoints** (curl/Postman sobre `docker-compose.dev.yml` con JWT reales
+> de Keycloak), que detectó y corrigió `HALLAZGO-LIVE-01` (PUT no cumplía reemplazo completo RFC 9110;
+> +2 tests de regresión `CRUD-04b`/`CRUD-04c`). Se re-ejecutó el **protocolo de 4 fases íntegro** sobre
+> el `develop` congelado: **Fase 1** inventario (gatekeeper verde, sin bugs) → **Fase 2** sin bugs
+> nuevos → **Fase 3** re-ejecución estricta (**100 tests, 0 fallos, cobertura ≥ 70 %, 0 lint**) +
+> **verificación en vivo 13/13** (10 endpoints + PUT-nulifica-omitido + 401 + 403) → **Fase 4**
+> certificación. **0 regresiones.** Detalle de la pasada en vivo:
+> [`verificacion_endpoints_asset-inventory.md`](verificacion_endpoints_asset-inventory.md).
 
 > **R1.1 — re-certificación estricta completa (4 fases, 2026-07-15):** tras R1 se añadieron cambios
 > productivos (BSRCH-02 `unaccent`+V6, sobre de evento `version` 1.1.0, JSON Schema a ubicación
@@ -34,7 +44,8 @@ pruebas de seguridad server-side.
 | ✅ PASS | **71** |
 | N/A (justificados) | **2** (RN-05/RN-07, imposibles por construcción) |
 | ⏳ Diferido | **0** (BSRCH-02 se cerró tras la certificación con `unaccent`, Flyway V6) |
-| Tests automatizados | **98** · 0 fallos · cobertura ≥ 70 % statements (R1: 82 → R1.1: 98) |
+| Tests automatizados | **100** · 0 fallos · cobertura ≥ 70 % statements (R1: 82 → R1.1: 98 → R1.2: 100) |
+| Verificación en vivo de endpoints | **10/10 ✅** (curl/Postman sobre Docker Compose, R1.2) |
 | Lint/formato | 0 Checkstyle · 0 Spotless |
 | Regresión final | **0 regresiones** |
 
@@ -120,3 +131,9 @@ seguridad + reproducción): [`verificacion_endpoints_asset-inventory.md`](verifi
   (los campos omitidos se limpian); PATCH (merge, RFC 7386) solo toca lo presente. Un test de PUT
   debe **ejercitar un campo omitido** y verificar que queda en `null`, no solo reenviar los mismos
   valores. Aplicar a todos los servicios con endpoints PUT.
+- **L-QA-05 — la verificación en vivo cubre lo que el harness no ve:** los tests automatizados corren
+  dentro del proceso de test; no prueban la **imagen/Dockerfile**, el arranque real, el wiring de
+  config/secretos por entorno, los **JWT reales** del IdP, la red entre contenedores ni la
+  serialización HTTP de extremo a extremo. Por eso la **verificación en vivo de endpoints** (curl/
+  Postman sobre el artefacto desplegado) es **obligatoria por servicio** e integrada en el protocolo
+  de 4 fases (Fase 3/4). Es la red que cazó `HALLAZGO-LIVE-01`.
