@@ -5,9 +5,8 @@
 > decisiones transversales nuevas. Conciso: **decisiones y contratos, no tutoriales**.
 > Requerimientos (RF/RNF) y matriz RBAC completa: `../proyecto_microservicios_redsegura.md`.
 
-**Versión:** 0.6.0 · **Última actualización:** 2026-07-14 · **Estado:** en desarrollo (Fase A —
-`asset-inventory-service` implementado; CI activo; RF-05a dual-stack IPv4/IPv6 en contrato, pendiente
-de implementar)
+**Versión:** 0.6.1 · **Última actualización:** 2026-07-14 · **Estado:** en desarrollo (Fase A —
+`asset-inventory-service` implementado, incl. RF-05a dual-stack IPv4/IPv6; CI activo)
 
 ---
 
@@ -267,7 +266,7 @@ la capa de servicio, y contratos OpenAPI desde la primera versión (RNF-27).
 - **Contratos:** ✅ 5 contratos OpenAPI de Fase A definidos, validados y **sintonizados con
   estándares de industria** (RFC 7807, probes, Idempotency-Key/ETag, ADR-08..11); **gobernados
   en CI con Spectral** (ADR-12). Catálogo de eventos definido.
-- **Tests / cobertura:** `asset-inventory-service` — **57 tests** en verde (unit + Testcontainers
+- **Tests / cobertura:** `asset-inventory-service` — **65 tests** en verde (unit + Testcontainers
   PostgreSQL/RabbitMQ + MockMvc), cobertura ≥ 70 % statements, 0 Checkstyle. Resto de servicios: N/A.
   Umbral: ≥ 70 %.
 
@@ -294,10 +293,10 @@ la capa de servicio, y contratos OpenAPI desde la primera versión (RNF-27).
 
 **Fase A — en curso:**
 - [~] `asset-inventory-service`: dominio + CRUD + búsqueda/filtros + RBAC + ETag/If-Match +
-  idempotencia endurecida + redacción `mgmtIp` por rol + 401/403 `problem+json` + log de seguridad
-  (OWASP A09) + observabilidad + eventos `asset.*` vía transactional outbox (RN11) + **importación
-  masiva asíncrona** (RF-04) + **CI activo/gateando** ✅; **pendiente**: certificación QA de 4 fases,
-  Pact (al existir el primer consumidor).
+  idempotencia endurecida + **direccionamiento dual-stack IPv4/IPv6** (RF-05a) + redacción de
+  direcciones por rol + 401/403 `problem+json` + log de seguridad (OWASP A09) + observabilidad +
+  eventos `asset.*` vía transactional outbox (RN11) + importación masiva asíncrona (RF-04) + **CI
+  activo/gateando** ✅; **pendiente**: certificación QA de 4 fases, Pact (al existir el primer consumidor).
 - [ ] `config-backup-service`, `compliance-audit-service`, `alerting-service`, `notification-service`.
 - [ ] Golden path E2E en Docker Compose.
 - [ ] Trasladar decisiones y lecciones a este documento al cerrar cada módulo.
