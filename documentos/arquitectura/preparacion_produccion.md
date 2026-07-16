@@ -35,7 +35,7 @@ Los ítems se anclan a una de estas etapas/condiciones, no a "el final":
 
 | Ítem | RNF | Disparador | Aplica a | Estado (asset-inventory) |
 |---|---|---|---|---|
-| Validación de token: firma **+ issuer + audience + expiración** en el servicio | RNF-29 | **DEV** | todos los que exponen API protegida | 🟡 en curso (este ciclo) |
+| Validación de token: firma **+ issuer + audience + expiración** en el servicio | RNF-29 | **DEV** | todos los que exponen API protegida | ✅ hecho |
 | RBAC validado server-side por endpoint (no confiar solo en el Gateway) | RNF-04 | **DEV** | todos | ✅ hecho |
 | Errores sin fuga de internos (RFC 7807) | RNF-09 | **DEV** | todos | ✅ hecho |
 | Redacción de datos sensibles por rol | RNF-04 | **DEV** | los que manejan datos sensibles | ✅ hecho |
@@ -47,8 +47,8 @@ Los ítems se anclan a una de estas etapas/condiciones, no a "el final":
 
 | Ítem | RNF | Disparador | Aplica a | Estado |
 |---|---|---|---|---|
-| SCA de dependencias **bloqueante en crítico** en CI (Dependabot + dependency-check/pip-audit) | RNF-08 | **DEV** | todos | 🟡 en curso (este ciclo) |
-| Escaneo de **imagen de contenedor** (Trivy/Grype) bloqueante en crítico | RNF-08 | **DEV** (al haber Dockerfile) | todos | 🟡 en curso (este ciclo) |
+| SCA de dependencias **bloqueante en crítico** en CI (Dependabot + dependency-check/pip-audit) | RNF-08 | **DEV** | todos | ✅ hecho |
+| Escaneo de **imagen de contenedor** (Trivy/Grype) bloqueante en crítico | RNF-08 | **DEV** (al haber Dockerfile) | todos | ✅ hecho |
 
 ### 2.3 Resiliencia y disponibilidad
 
@@ -57,7 +57,7 @@ Los ítems se anclan a una de estas etapas/condiciones, no a "el final":
 | Timeouts + retry con backoff + circuit breaker (Resilience4j) | RNF-10 | **INT-SYNC** | los que llamen síncronamente a otro servicio/dispositivo | 🔵 N/A hoy → obligatorio en INT-SYNC |
 | Degradación con gracia ante caída de dependencia no crítica | RNF-11 | **INT-SYNC / GP** | los que dependan de otros | 🔵 diferido (INT-SYNC) |
 | Health probes liveness/readiness | RNF-12 | **DEV** | todos | ✅ hecho |
-| **Entrega garantizada de eventos**: outbox + publisher confirms + relay multi-réplica (SKIP LOCKED) + DLQ | RNF-30 | **DEV** (productor) / **INT-CONS** (idempotencia consumidor) | productores y consumidores de eventos | 🟡 en curso (este ciclo) |
+| **Entrega garantizada de eventos**: outbox + publisher confirms + relay multi-réplica (SKIP LOCKED) + DLQ | RNF-30 | **DEV** (productor) / **INT-CONS** (idempotencia consumidor) | productores y consumidores de eventos | ✅ hecho |
 
 ### 2.4 Escalabilidad y despliegue
 
@@ -82,7 +82,7 @@ Los ítems se anclan a una de estas etapas/condiciones, no a "el final":
 |---|---|---|---|---|
 | Cobertura ≥ 70 % + gatekeeper en CI | RNF-18/19 | **DEV** | todos | ✅ hecho |
 | Documentación previa al código (propuesta/casos/memoria) | RNF-20 | **DEV** | todos | ✅ hecho |
-| **Swagger UI en runtime** (springdoc) sirviendo el contrato | RNF-27 | **DEV** | todos | 🟡 en curso (este ciclo) |
+| **Swagger UI en runtime** (springdoc) sirviendo el contrato | RNF-27 | **DEV** | todos | ✅ hecho |
 | Contract testing (Pact) consumidor↔productor | RNF-21 | **INT-CONS** | pares consumidor/productor | 🔵 N/A hoy → obligatorio en INT-CONS |
 | Verificación en vivo de endpoints (10/10) | (metodología QA) | **DEV** | todos | ✅ hecho |
 
