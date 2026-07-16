@@ -56,14 +56,15 @@ es la red de seguridad contra defectos de semántica HTTP, de despliegue y de co
    - Concurrencia optimista (`ETag`/`If-Match`) si el servicio la expone.
 4. **Semántica HTTP correcta**, en particular: **PUT = reemplazo completo** (RFC 9110, los campos
    omitidos se limpian) **vs PATCH = merge** (RFC 7386, solo lo enviado) — ver `L-QA-04`.
-5. **Entregables:** una **colección Postman** en `<repo>/deploy/postman/` (con ejemplos de request y
-   **respuestas esperadas** guardadas) + un **reporte** `verificacion_endpoints_<servicio>.md`
-   (desde `templates/qa/verificacion_endpoints_TEMPLATE.md`) con la tabla N/N y los hallazgos.
+5. **Entregables:** una **colección Postman** en `backend/<servicio>/postman/` (con ejemplos de
+   request y **respuestas esperadas** guardadas) + un **reporte**
+   `backend/<servicio>/documentos/verificacion_endpoints.md` (desde
+   `templates/qa/verificacion_endpoints_TEMPLATE.md`) con la tabla N/N y los hallazgos.
 
-**Herramienta y entorno:** `docker-compose.dev.yml` del repo (PostgreSQL/broker + **Keycloak
-sembrado** + el servicio empaquetado por su `Dockerfile`), guía de reproducción en
-`deploy/postman/GUIA_PRUEBAS_POSTMAN.md`. Cualquier hallazgo se corrige, se añade **test de
-regresión automatizado** (para que no vuelva a escaparse) y se registra en `reporte_qa.md`.
+**Herramienta y entorno:** `docker-compose.dev.yml` (infra compartida del backend: PostgreSQL/broker
++ **Keycloak sembrado**) + el servicio empaquetado por su `Dockerfile`; guía de reproducción en
+`backend/<servicio>/postman/GUIA_PRUEBAS_POSTMAN.md`. Cualquier hallazgo se corrige, se añade **test
+de regresión automatizado** (para que no vuelva a escaparse) y se registra en `reporte_qa.md`.
 
 > Está integrada en la **definición de "done"** (`CLAUDE.md`, Propuesta D) y en la **Fase 3**
 > (re-ejecución) del protocolo de 4 fases: una ronda de QA no está completa sin la pasada en vivo.
@@ -92,7 +93,7 @@ regresión automatizado** (para que no vuelva a escaparse) y se registra en `rep
 
 | Servicio | Fase | Particularidades de prueba a considerar |
 |---|---|---|
-| `asset-inventory-service` | A | ✅ **Implementado** (referencia): CRUD, RBAC, ETag/If-Match, idempotencia, dual-stack IPv4/IPv6, redacción, outbox, bulk, observabilidad, conformidad de eventos, BDD. **Verificación en vivo 10/10** ✅ (`verificacion_endpoints_asset-inventory.md`). |
+| `asset-inventory-service` | A | ✅ **Implementado** (referencia): CRUD, RBAC, ETag/If-Match, idempotencia, dual-stack IPv4/IPv6, redacción, outbox, bulk, observabilidad, conformidad de eventos, BDD. **Verificación en vivo 10/10** ✅ (`backend/asset-inventory-service/documentos/verificacion_endpoints.md`). |
 | `config-backup-service` | A | **Conexión SSH a dispositivos (Netmiko/NAPALM):** mockear/simular el dispositivo (o GNS3 de prueba) — no conectar a equipos reales en tests. `running-config` vs `startup-config`, `diff`, flag `unsavedChanges`. Jobs asíncronos de respaldo. **Primer consumidor de `asset.*`** → habilita el **Pact real** (valida contra `asset-event.schema.json`). |
 | `compliance-audit-service` | A | Motor de reglas/hallazgos: casos de política (cumple/incumple), histórico. Consumidor de `asset.*`. |
 | `alerting-service` | A | Reglas de alerta (CRUD), evaluación, deduplicación; consumidor de eventos (`config.*`, `compliance.*`). Verificar la regla de `alert.created`. |
@@ -106,6 +107,6 @@ regresión automatizado** (para que no vuelva a escaparse) y se registra en `rep
 ## 5. Trazabilidad
 - Casos por servicio: `<servicio>/documentos/casos_de_prueba.md` (matriz + estado).
 - BDD/aceptación: `<servicio>/src/test/resources/features/*.feature` (Java) — base de la UAT.
-- **Verificación en vivo:** `qa/verificacion_endpoints_<servicio>.md` + colección Postman en
-  `<repo>/deploy/postman/` + guía `deploy/postman/GUIA_PRUEBAS_POSTMAN.md`.
-- UAT: [`../uat/plan_uat.md`](../uat/plan_uat.md) y `../uat/uat_<servicio>.md`.
+- **Verificación en vivo:** `backend/<servicio>/documentos/verificacion_endpoints.md` + colección
+  Postman + guía en `backend/<servicio>/postman/` (`GUIA_PRUEBAS_POSTMAN.md`).
+- UAT (cliente): [`../uat/`](../uat/README.md) — `plan_uat.md` + `<servicio>/{guion_uat.md, demo_guiada.md}`.

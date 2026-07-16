@@ -15,7 +15,7 @@
 | **Criterios de aceptación por RF** | Cada requisito funcional en lenguaje de negocio, con resultado esperado y **firma** | Tabla RF → criterio → resultado → estado → visto bueno |
 | **Escenarios BDD / Gherkin** (Dado–Cuando–Entonces) | Casos concretos que el cliente **lee y aprueba**; están **automatizados** (Cucumber) y corren en CI | Texto casi natural en español |
 | **Reporte de avance de negocio** | Estado de **funcionalidades** (no de tests) y % de avance por servicio/fase | Semáforo + % + próximos hitos |
-| **Demo guiada** | Ver el software funcionando de extremo a extremo | Sesión en vivo: Swagger UI / Postman hoy; **frontend** cuando exista |
+| **Demo guiada** | Ver el software funcionando de extremo a extremo | Sesión en vivo con **colección Postman** (guion en `<servicio>/demo_guiada.md`) hoy; **frontend** cuando exista |
 
 ## 2. Proceso de aceptación
 
@@ -37,16 +37,17 @@
 
 ## 4. Estado y artefactos por servicio
 
-| Servicio | UAT | Artefacto |
+| Servicio | UAT | Artefactos (carpeta `<servicio>/`) |
 |---|---|---|
-| `asset-inventory-service` | Escenarios BDD automatizados ✅; criterios por RF documentados | [`uat_asset-inventory-service.md`](uat_asset-inventory-service.md) |
-| resto | pendiente (al desarrollar cada servicio) | `uat_<servicio>.md` (desde plantilla) |
+| `asset-inventory-service` | Escenarios BDD automatizados ✅; criterios por RF + demo guiada | [`asset-inventory-service/`](asset-inventory-service/) — [guion_uat.md](asset-inventory-service/guion_uat.md) · [demo_guiada.md](asset-inventory-service/demo_guiada.md) |
+| resto | pendiente (al desarrollar cada servicio) | `<servicio>/{guion_uat.md, demo_guiada.md}` (desde `../templates/uat/`) |
 
 ## 5. Nota sobre el momento actual
 El `frontend` aún no existe, así que la **demo plena** para un cliente no-técnico llegará con la UI.
 Hoy la validación se apoya en: (a) **criterios de aceptación por RF** con firma, (b) **escenarios
-Gherkin** aprobables y ya **automatizados**, y (c) para un stakeholder semi-técnico, una **demo
-guiada** vía Swagger UI / colección Postman.
+Gherkin** aprobables y ya **automatizados**, y (c) una **demo guiada** en vivo con la **colección
+Postman** (guion paso a paso en cada `<servicio>/demo_guiada.md`).
 
-> Plantillas: [`../templates/uat/plan_uat_TEMPLATE.md`](../templates/uat/plan_uat_TEMPLATE.md) y
-> [`../templates/uat/uat_servicio_TEMPLATE.md`](../templates/uat/uat_servicio_TEMPLATE.md).
+> Plantillas ([`../templates/uat/`](../templates/uat/)): `plan_uat_TEMPLATE.md`,
+> `uat_servicio_TEMPLATE.md` (→ `<servicio>/guion_uat.md`) y `demo_guiada_TEMPLATE.md`
+> (→ `<servicio>/demo_guiada.md`).

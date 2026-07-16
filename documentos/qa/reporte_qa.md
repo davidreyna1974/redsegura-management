@@ -21,7 +21,7 @@ resolver, 0 regresiones. Resto de microservicios: sin iniciar.
 > nuevos → **Fase 3** re-ejecución estricta (**100 tests, 0 fallos, cobertura ≥ 70 %, 0 lint**) +
 > **verificación en vivo 13/13** (10 endpoints + PUT-nulifica-omitido + 401 + 403) → **Fase 4**
 > certificación. **0 regresiones.** Detalle de la pasada en vivo:
-> [`verificacion_endpoints_asset-inventory.md`](verificacion_endpoints_asset-inventory.md).
+> [`verificacion_endpoints.md` (repo backend)](../../../backend/asset-inventory-service/documentos/verificacion_endpoints.md).
 
 > **R1.1 — re-certificación estricta completa (4 fases, 2026-07-15):** tras R1 se añadieron cambios
 > productivos (BSRCH-02 `unaccent`+V6, sobre de evento `version` 1.1.0, JSON Schema a ubicación
@@ -116,7 +116,7 @@ Prueba manual/en vivo de los **10 endpoints** por HTTP real (curl / colección P
 **entorno de desarrollo Docker Compose** (servicio empaquetado + PostgreSQL + RabbitMQ + Keycloak
 sembrado). Complementa la certificación automatizada con una pasada de humo sobre el artefacto
 desplegado. **Resultado: 10/10 ✅.** Reporte detallado (tabla por endpoint + dimensiones de
-seguridad + reproducción): [`verificacion_endpoints_asset-inventory.md`](verificacion_endpoints_asset-inventory.md).
+seguridad + reproducción): [`verificacion_endpoints.md` (repo backend)](../../../backend/asset-inventory-service/documentos/verificacion_endpoints.md).
 
 - **`HALLAZGO-LIVE-01` (corregido):** `PUT /devices/{id}` no cumplía **reemplazo completo**
   (RFC 9110) — `replace()` delegaba en la ruta de merge de PATCH y **no nulificaba los campos
