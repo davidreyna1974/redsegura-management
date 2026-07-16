@@ -73,6 +73,21 @@ Estructura de carpetas de referencia: <describe o enlaza el árbol del proyecto>
 - Decisiones transversales → memoria técnica global; lecciones → registro de lecciones.
 - README, CHANGELOG y diagrama al día como parte de "done".
 
+## 11. Endurecimiento a producción [si el proyecto tiene RNF de producción]
+
+<!-- GUÍA: estándares de CÓMO cumplir los RNF de endurecimiento. El CUÁNDO (etapa/disparador por
+     servicio) va en preparacion_produccion.md; el estado por servicio en su matriz_rnf.md. Incluye
+     al menos: validación de token (issuer/audience), entrega garantizada de eventos (si hay
+     mensajería), gate de cadena de suministro en CI (SCA + imagen), y API navegable en runtime. -->
+
+- **Validación de token:** validar firma **+ issuer + audience + expiración** en cada servicio
+  (defensa en profundidad; no confiar solo en el gateway). Externalizar issuer/audience por config.
+- **Entrega de eventos** (si hay mensajería): transactional outbox + publisher confirms + relay
+  seguro entre réplicas (`SKIP LOCKED`) + DLQ; consumidores idempotentes.
+- **Cadena de suministro:** SCA de dependencias + escaneo de imagen, **bloqueantes en crítico** en CI.
+- **API en runtime:** servir la documentación OpenAPI navegable (Swagger UI o equivalente).
+- **Regla:** *lo que no se gatea, deriva* → materializa cada RNF como gate ejecutable donde sea posible.
+
 ---
 
 ## 📒 Registro de lecciones (vivo)

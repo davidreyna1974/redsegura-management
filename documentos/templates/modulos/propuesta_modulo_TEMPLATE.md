@@ -75,13 +75,35 @@ gobernanza Spectral — aquí solo se confirma):
 
 **c) Hallazgos transversales a promover:** <ninguno | proponer ADR-XX + regla de gobernanza>.
 
+## 8b. Revisión de aplicabilidad de RNF (production readiness)
+
+<!-- GUÍA: paso OBLIGATORIO pre-código. Recorre TODOS los RNF del proyecto (§8 del spec maestro) y
+     decide, para ESTE servicio, si cada uno: Aplica (se cubre en DEV), es N/A (justificado), o se
+     Difiere (con disparador: INT-CONS/INT-SYNC/DEPLOY/PRE-REL — ver preparacion_produccion.md). Así
+     el servicio "nace revisado" y ningún RNF se salta por olvido. El resultado se materializa en la
+     matriz `<servicio>/documentos/matriz_rnf.md` (desde qa/matriz_rnf_TEMPLATE.md). -->
+
+Recorrido de los RNF (`proyecto_microservicios_redsegura.md §8`) para este servicio:
+
+| Bloque de RNF | Aplica en DEV | N/A (justificado) | Diferido (disparador) |
+|---|---|---|---|
+| Seguridad (auth/RBAC/token/secretos/errores) | <RNF-…> | <RNF-… + motivo> | <RNF-… → etapa> |
+| Cadena de suministro (SCA + imagen) | <RNF-08> | | |
+| Resiliencia/eventos (Resilience4j, entrega de eventos, health) | <RNF-…> | | <RNF-10 → INT-SYNC; RNF-21 → INT-CONS> |
+| Observabilidad · Calidad/CI/docs · API (Swagger runtime) | <RNF-…> | | |
+| Escalabilidad/despliegue · Rendimiento | | | <RNF-13/22/23 → DEPLOY; RNF-01 → PRE-REL> |
+
+- [ ] **Matriz de RNF creada** (`<servicio>/documentos/matriz_rnf.md`) con estado por RNF.
+- [ ] Los diferidos quedan registrados en `arquitectura/preparacion_produccion.md` con su disparador.
+
 ## 9. Checklist de apertura (antes de codificar)
 
 ```
 [ ] Propuesta creada (este documento).
-[ ] docs/qa/casos_de_prueba_modulo_<nombre>.md creado desde el TEMPLATE (categorías completas).
+[ ] documentos/casos_de_prueba.md creado desde el TEMPLATE (categorías completas).
 [ ] Memoria técnica de módulo iniciada.
 [ ] Contratos de dependencias verificados (Sección 4).
 [ ] Revisión contra estándares de industria (Sección 8) completada.
+[ ] Revisión de aplicabilidad de RNF (Sección 8b) + matriz_rnf.md creada.
 [ ] Gate de seguridad previsto para todas las rutas/endpoints nuevos.
 ```

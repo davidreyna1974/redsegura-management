@@ -71,6 +71,10 @@ sabe si pasaron sobre el código final o sobre el previo).
   lint en verde.
 - **Verificación en vivo de los N/N endpoints ✅** registrada en `backend/<servicio>/documentos/verificacion_endpoints.md`
   (desde `templates/qa/verificacion_endpoints_TEMPLATE.md`).
+- **Matriz de RNF ✅** (`backend/<servicio>/documentos/matriz_rnf.md`): ningún RNF de etapa **DEV** en
+  🟡; los diferidos (🔵) con disparador registrado en `arquitectura/preparacion_produccion.md`; los
+  ⬜ justificados. Un RNF con gate ejecutable (SCA/imagen, cobertura, contrato, Swagger) debe estar en
+  verde en CI — *lo que no se gatea, deriva*.
 - Si el servicio expone/consume un contrato: **Pact en verde** para todos los consumidores.
 - Actualizar el estado de sesión con resultado **CERTIFICADO** y el resumen de cobertura en el
   documento de casos de prueba del servicio.
