@@ -42,6 +42,9 @@
 ### FASE 4 — Certificación
 - `<cmd build>` → 0 errores · `<cmd test --coverage>` → cobertura ≥ <70>%, 0 fallos.
 - <!-- Si aplica: --> **Verificación en vivo de los N/N endpoints ✅** registrada.
+- <!-- Si el proyecto tiene RNF: --> **Matriz de RNF ✅** (`matriz_rnf.md`): ningún RNF de etapa DEV
+  pendiente; los diferidos con disparador en `preparacion_produccion.md`. RNF con gate ejecutable en
+  verde en CI.
 - Actualizar el estado de sesión con resultado **CERTIFICADO**.
 - Actualizar el resumen de cobertura en cada documento de casos afectado.
 - Commit: `chore(qa): verificación completa 4 fases — <fecha>`.

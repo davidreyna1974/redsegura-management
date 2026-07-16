@@ -11,6 +11,10 @@
 [ ] Gatekeeper en verde sobre el commit a desplegar: build + tests + lint + cobertura ≥ 70%.
 [ ] Sin secretos en el repo; .env.example completo y documentado.
 [ ] CHANGELOG y versión (SemVer + tag) actualizados.
+[ ] PREPARACIÓN A PRODUCCIÓN (RNF-31): en la checklist `arquitectura/preparacion_produccion.md`,
+    TODOS los ítems de etapas ≤ PRE-REL están en ✅ para cada servicio a desplegar (los diferidos
+    de esta etapa —secretos, k8s/HPA, IaC, TLS, prueba de carga— ya cerrados). Ningún RNF con gate
+    ejecutable en rojo.
 ```
 
 ## 2. Infraestructura

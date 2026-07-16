@@ -516,13 +516,15 @@ Kubernetes.
 - **RNF-05:** Comunicación cifrada (HTTPS/TLS) entre el cliente y el API Gateway. El tráfico interno entre microservicios se restringe por Security Groups dentro de la VPC de AWS; mTLS queda documentado como mejora futura, no como requisito del MVP.
 - **RNF-06:** Los secretos (credenciales SSH de dispositivos, claves de API, credenciales de base de datos) deben externalizarse vía variables de entorno o gestor de secretos; nunca en código ni en el repositorio.
 - **RNF-07:** El alcance autorizado de escaneo (rangos IP/CIDR) debe ser **configurable por entorno** y aplicarse como **control técnico obligatorio**, no solo como política: durante desarrollo/pruebas apunta exclusivamente a la red simulada (Sección 6.6); en un despliegue para un cliente real, apunta únicamente a los rangos que ese cliente autorice explícitamente.
-- **RNF-08:** Escaneo automatizado de dependencias (SCA) vía Dependabot y análisis en CI (bloqueante en severidad crítica).
+- **RNF-08:** Escaneo automatizado de la **cadena de suministro** en CI, **bloqueante en severidad crítica**: (a) **dependencias** (SCA) vía Dependabot + análisis en el gate del servicio (`mvn dependency-check` / `pip-audit`), y (b) **imagen de contenedor** (p. ej. Trivy/Grype) antes de publicar. El escaneo pesado (OWASP dependency-check con base NVD) puede correr en un workflow programado aparte.
 - **RNF-09:** Los errores de la API no deben filtrar detalles internos (stack traces, nombres de tablas/clases) al cliente.
+- **RNF-29:** Cada microservicio **valida el JWT de forma independiente** (defensa en profundidad, sin confiar solo en el API Gateway — refuerza RNF-03/04): firma contra el JWKS del IdP, **`issuer`**, **`audience`** y **expiración**. Un token de otro realm/emisor o de audiencia distinta debe rechazarse con `401`.
 
 ### 8.3 Disponibilidad y resiliencia
-- **RNF-10:** Cada microservicio debe implementar timeouts, reintentos con backoff y circuit breaker (Resilience4j) en sus llamadas a otros servicios o a dispositivos de red externos.
+- **RNF-10:** Cada microservicio debe implementar timeouts, reintentos con backoff y circuit breaker (Resilience4j) en sus llamadas a otros servicios o a dispositivos de red externos. **Aplicabilidad:** este requisito **se activa cuando el servicio realiza una llamada síncrona saliente** (a otro servicio o dispositivo); mientras un servicio no las tenga, se marca **N/A justificado** y pasa a **obligatorio en la etapa** donde se introduce esa llamada (ver RNF-31 y la checklist de preparación a producción). No se añaden circuit breakers donde no hay dependencia saliente que proteger.
 - **RNF-11:** El sistema debe degradarse con gracia ante la caída de un microservicio no crítico (p. ej., el dashboard debe mostrar "datos no disponibles" en la sección afectada, no fallar por completo).
 - **RNF-12:** Cada microservicio debe exponer un endpoint de salud (`/health`) para verificación de disponibilidad.
+- **RNF-30:** **Entrega garantizada de eventos de dominio.** La publicación de eventos usa **transactional outbox** (persistir el evento en la misma transacción del cambio) con semántica **at-least-once**: relay al broker con **publisher confirms**, **seguro ante múltiples réplicas** (p. ej. `SELECT … FOR UPDATE SKIP LOCKED` o equivalente), reintentos y **DLQ** tras N fallos. Los **consumidores deben ser idempotentes** (reproceso sin efecto). Un evento no debe perderse por un reinicio ni duplicarse sin control entre réplicas.
 
 ### 8.4 Escalabilidad
 - **RNF-13:** Cada microservicio debe ser stateless y escalable horizontalmente de forma independiente (demostrado con autoscaling básico — HPA — en el despliegue de Kubernetes).
@@ -551,8 +553,11 @@ Kubernetes.
 - **RNF-26:** El dashboard debe diferenciar estados vacíos ("sin dispositivos registrados" vs. "sin resultados de búsqueda") y mostrar feedback de carga/error explícito.
 
 ### 8.10 Compatibilidad y estándares
-- **RNF-27:** Cada microservicio debe documentar su API con OpenAPI/Swagger desde su primera versión funcional.
+- **RNF-27:** Cada microservicio debe documentar su API con OpenAPI/Swagger desde su primera versión funcional, **y exponerla navegable en tiempo de ejecución** (Swagger UI vía springdoc en Java / equivalente en Python), de modo que el contrato sea explorable en vivo por integradores y en la demo de UAT.
 - **RNF-28:** El versionado del sistema debe seguir SemVer, con CHANGELOG (formato Keep a Changelog) por repositorio.
+
+### 8.11 Preparación para producción (production readiness)
+- **RNF-31:** Antes de considerarse **listo para producción**, cada microservicio debe cumplir la **checklist de preparación a producción** (`arquitectura/preparacion_produccion.md`). Cada ítem de endurecimiento (seguridad, resiliencia, entrega de eventos, cadena de suministro, despliegue, secretos, rendimiento) declara **en qué etapa/condición se activa** y **a qué servicios aplica**; se atiende **oportunamente en la etapa donde el esfuerzo es más eficiente — no necesariamente al final**. Un ítem aplazado no es opcional: es **obligatorio-diferido** con disparador explícito, y su incumplimiento en la etapa correspondiente **bloquea** la salida a producción. La "definición de done" funcional (build+tests+lint+cobertura+contrato) **no** equivale a production-ready: ambos estados se rastrean por separado.
 
 ---
 

@@ -281,6 +281,30 @@ entre los 10 microservicios se garantiza por enforcement automático, no por dis
 
 ---
 
+## 13. Endurecimiento a producción (RNF-08/27/29/30 · ADR-14..17)
+
+Estándares de *cómo* cumplir los RNF de endurecimiento. El *cuándo* (etapa/disparador por servicio)
+vive en [`preparacion_produccion.md`](preparacion_produccion.md); el estado por servicio en
+`<servicio>/documentos/matriz_rnf.md`.
+
+- **Validación de token (RNF-29, ADR-14):** el `JwtDecoder` de cada Resource Server valida, además de
+  firma y expiración, el **`issuer`** (`JwtValidators.createDefaultWithIssuer(...)`) y la **`audience`**
+  (validador `OAuth2TokenValidator<Jwt>` propio que exige el `aud`/`azp` esperado). `issuer` y
+  `audience` se externalizan por config (RNF-06). Test obligatorio: token de otro issuer/audience → `401`.
+- **Entrega de eventos (RNF-30, ADR-15):** transactional outbox (ADR-04) + **publisher confirms**
+  (`spring.rabbitmq.publisher-confirm-type=correlated`; marcar publicado solo tras el ACK) + relay con
+  `SELECT … FOR UPDATE SKIP LOCKED` (query nativa o `@Lock(PESSIMISTIC_WRITE)` + `SKIP LOCKED`) para
+  ser seguro con múltiples réplicas + **DLQ** tras N reintentos. Consumidores **idempotentes**.
+- **Cadena de suministro (RNF-08, ADR-16):** el gate del servicio corre **SCA** (OWASP
+  `dependency-check` en Java / `pip-audit` en Python) y **escaneo de imagen** (Trivy), **bloqueantes en
+  crítico**; Dependabot agrupado sigue vigente. El escaneo pesado con base NVD puede ir en un job
+  programado aparte para no frenar el gate.
+- **OpenAPI en runtime (RNF-27, ADR-17):** exponer **Swagger UI** y `/v3/api-docs` (springdoc en Java /
+  FastAPI nativo). La ruta de la doc no exige token; el `openapi.yaml` del repo sigue siendo la fuente
+  de verdad contract-first.
+
+---
+
 ## 📒 Registro de lecciones (vivo)
 
 | ID | Lección (regla a futuro) | Origen | Alcance |

@@ -240,6 +240,9 @@ hasta que TODOS sus casos están en `✅ PASS` con el rol/condición correctos. 
        Compose), con auth y dependencias reales → reporte verificacion_endpoints_<servicio>.md
        (desde qa/verificacion_endpoints_TEMPLATE.md). Complementa —no sustituye— los tests
        automatizados; cubre despliegue/config/semántica HTTP (PUT=reemplazo completo vs PATCH=merge).
+[ ] 6. RNF verificados: matriz_rnf.md (desde qa/matriz_rnf_TEMPLATE.md) sin RNF de etapa DEV
+       pendiente; los diferidos con disparador en preparacion_produccion.md. Un RNF sin gate NO
+       cuenta como cumplido. "done funcional" ≠ "production-ready".
 ```
 
 ---
