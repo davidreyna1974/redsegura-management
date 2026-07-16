@@ -69,7 +69,7 @@ sabe si pasaron sobre el código final o sobre el previo).
 ### FASE 4 — Certificación
 - Gatekeeper completo del servicio: build + tests con cobertura **≥ 70 % statements**, 0 fallos,
   lint en verde.
-- **Verificación en vivo de los N/N endpoints ✅** registrada en `qa/verificacion_endpoints_<servicio>.md`
+- **Verificación en vivo de los N/N endpoints ✅** registrada en `backend/<servicio>/documentos/verificacion_endpoints.md`
   (desde `templates/qa/verificacion_endpoints_TEMPLATE.md`).
 - Si el servicio expone/consume un contrato: **Pact en verde** para todos los consumidores.
 - Actualizar el estado de sesión con resultado **CERTIFICADO** y el resumen de cobertura en el

@@ -14,7 +14,7 @@ gatekeeper) con una pasada de humo end-to-end sobre el artefacto desplegado.
 - **Fecha:** <YYYY-MM-DD>
 - **Entorno:** `docker-compose.dev.yml` (servicio en `localhost:<puerto>`, Keycloak en `localhost:8080`)
 - **Autenticación:** JWT reales de Keycloak (realm `redsegura`), roles <ADM/OPE/AUD según aplique>
-- **Guía para reproducir:** `<repo>/deploy/postman/GUIA_PRUEBAS_POSTMAN.md`
+- **Guía para reproducir:** `backend/<servicio>/postman/GUIA_PRUEBAS_POSTMAN.md`
 
 ---
 
@@ -66,7 +66,7 @@ gatekeeper) con una pasada de humo end-to-end sobre el artefacto desplegado.
 ## Cómo reproducir
 
 1. `cd <repo> && docker compose -f docker-compose.dev.yml up --build`
-2. Importar la colección Postman (`deploy/postman/`) o usar los `curl` de `GUIA_PRUEBAS_POSTMAN.md`.
+2. Importar la colección Postman (`backend/<servicio>/postman/`) o usar los `curl` de `GUIA_PRUEBAS_POSTMAN.md`.
 3. Ejecutar en orden: token (por rol) → <flujo de endpoints del servicio>.
 4. Probar el rol menos privilegiado (403) y sin token (401); redacción si aplica.
 5. Al terminar: `docker compose -f docker-compose.dev.yml down -v`.

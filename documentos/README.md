@@ -20,11 +20,10 @@
 ## ✅ Calidad (QA) y aceptación (UAT)
 | Documento | Contenido | Estado |
 |---|---|---|
-| [Estrategia de pruebas](qa/estrategia_de_pruebas.md) | Capas de test por servicio (Testcontainers, conformidad de contrato, BDD), contratos compartidos, consideraciones por servicio. | ✅ |
+| [Estrategia de pruebas](qa/estrategia_de_pruebas.md) | Capas de test por servicio (Testcontainers, conformidad de contrato, BDD, **verificación en vivo de endpoints**), contratos compartidos, consideraciones por servicio. | ✅ |
 | [Protocolo de 4 fases](qa/protocolo_verificacion_4_fases.md) | Metodología de QA técnica. | ✅ |
-| [Reporte de QA](qa/reporte_qa.md) | Resultado consolidado de certificación por servicio (`asset-inventory` R1 ✅). | ✅ |
-| [Plan de UAT](uat/plan_uat.md) | Aceptación con el cliente (criterios por RF, BDD/Gherkin, avance de negocio). | ✅ |
-| [UAT · asset-inventory](uat/uat_asset-inventory-service.md) | Criterios de aceptación + avance de negocio del 1.º servicio. | ✅ |
+| [Reporte de QA](qa/reporte_qa.md) | Resultado consolidado de certificación por servicio (`asset-inventory` R1.2 ✅). | ✅ |
+| [**UAT — validación con el cliente**](uat/README.md) | Paquete de aceptación consolidado: plan general + por servicio (guion de criterios/firma + **demo guiada**). Reporte técnico de verificación en vivo vive en `backend/<servicio>/documentos/`. | ✅ |
 
 ## 📦 Despliegue
 | Documento | Contenido | Estado |

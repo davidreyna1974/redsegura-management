@@ -270,7 +270,7 @@ la capa de servicio, y contratos OpenAPI desde la primera versión (RNF-27).
 - **Tests / cobertura:** `asset-inventory-service` — **100 tests** en verde (unit + Testcontainers
   PostgreSQL/RabbitMQ + MockMvc), cobertura ≥ 70 % statements, 0 Checkstyle. Resto de servicios: N/A.
   Verificación en vivo de los 10 endpoints (curl/Postman sobre Docker Compose): 10/10 ✅
-  (`qa/verificacion_endpoints_asset-inventory.md`).
+  (`backend/asset-inventory-service/documentos/verificacion_endpoints.md`).
   Umbral: ≥ 70 %.
 
 ---

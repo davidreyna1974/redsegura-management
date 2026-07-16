@@ -35,7 +35,11 @@
 
 ## 3. Cómo validar hoy (sin frontend)
 - **Lectura y firma** de la tabla §1 (criterios por RF) con el cliente.
-- **Demo guiada** por API (Swagger UI / colección Postman) mostrando cada escenario.
-- Evidencia objetiva: los escenarios BDD corren **verdes en CI** en cada cambio.
+- **Demo guiada** en vivo, escenario por escenario, con la colección Postman sobre el entorno de
+  desarrollo — guion paso a paso en [`demo_guiada.md`](demo_guiada.md) (qué mostrar, qué ejecutar y
+  qué debe ver el cliente en cada RF).
+- Evidencia objetiva: los escenarios BDD corren **verdes en CI** en cada cambio, y la
+  **verificación en vivo de los 10 endpoints** quedó documentada (10/10) en el reporte técnico del
+  servicio.
 
 > Firma de aceptación: __________________________  Fecha: ____________
