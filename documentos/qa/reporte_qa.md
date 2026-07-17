@@ -11,7 +11,7 @@ resolver, 0 regresiones. Resto de microservicios: sin iniciar.
 
 ## `asset-inventory-service` — ✅ CERTIFICADO · R1 (2026-07-14) + R1.1 (2026-07-15) + re-certificación R1.2 (2026-07-15)
 
-**Build certificado:** rama `develop` del repo `backend` (Java 21, Spring Boot 3.3.5).
+**Build certificado:** rama `develop` del repo `backend` (Java 21, Spring Boot 3.5.16).
 
 > **R1.2 — re-certificación estricta completa (4 fases, 2026-07-15):** tras R1.1 se incorporó la
 > **verificación en vivo de endpoints** (curl/Postman sobre `docker-compose.dev.yml` con JWT reales
@@ -137,3 +137,9 @@ seguridad + reproducción): [`verificacion_endpoints.md` (repo backend)](../../.
   serialización HTTP de extremo a extremo. Por eso la **verificación en vivo de endpoints** (curl/
   Postman sobre el artefacto desplegado) es **obligatoria por servicio** e integrada en el protocolo
   de 4 fases (Fase 3/4). Es la red que cazó `HALLAZGO-LIVE-01`.
+- **L-QA-06 — un gate con dientes encuentra problemas reales el primer día:** al implementar RNF-08
+  (Trivy en CI), el escaneo detectó **5 CVE CRÍTICOS** con parche disponible en dependencias
+  transitivas de Spring Boot 3.3.5 (Tomcat RCE/bypass de auth, Spring Security bypass) que llevaban
+  meses latentes sin que nada avisara. Forzó subir a Spring Boot 3.5.16. Confirma la tesis del
+  proceso: *lo que no se gatea, deriva* — y en cuanto se gatea, aflora la deuda oculta. Un RNF sin
+  gate ejecutable es aspiracional.
