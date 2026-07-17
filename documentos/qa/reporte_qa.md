@@ -3,15 +3,25 @@
 Reporte consolidado de las campañas de QA por microservicio, bajo el
 [Protocolo de verificación en 4 fases](protocolo_verificacion_4_fases.md).
 
-**Última actualización:** 2026-07-15
+**Última actualización:** 2026-07-17
 **Resultado global:** ✅ **1 módulo certificado** (`asset-inventory-service`), 0 bugs funcionales sin
 resolver, 0 regresiones. Resto de microservicios: sin iniciar.
 
 ---
 
-## `asset-inventory-service` — ✅ CERTIFICADO · R1 (2026-07-14) + R1.1 (2026-07-15) + re-certificación R1.2 (2026-07-15)
+## `asset-inventory-service` — ✅ CERTIFICADO · R1 (07-14) + R1.1 (07-15) + R1.2 (07-15) + re-certificación R1.3 (2026-07-17, endurecimiento)
 
 **Build certificado:** rama `develop` del repo `backend` (Java 21, Spring Boot 3.5.16).
+
+> **R1.3 — re-certificación por endurecimiento a producción (4 fases, 2026-07-17):** tras R1.2 se
+> cerraron los 4 RNF de etapa DEV pendientes (RNF-08/27/29/30, ADR-14..17): validación de JWT
+> issuer+audience, entrega de eventos con publisher confirms + relay `SKIP LOCKED`, gate de SCA/imagen
+> (Trivy) en CI, y OpenAPI en runtime (springdoc). **El gate de SCA detectó 5 CVE CRÍTICOS** en las
+> dependencias de Spring Boot 3.3.5 → **upgrade a 3.5.16** (springdoc 2.8.17). Se re-ejecutó el
+> gatekeeper completo sobre `develop` congelado (**105 tests, 0 fallos, cobertura ≥ 70 %, 0 lint, CI
+> verde incluyendo Trivy**) + **verificación en vivo** (10/10 endpoints + JWT 401 + RBAC 403 +
+> redacción + Swagger 200). **0 regresiones.** Se añadieron 5 tests (`AudienceValidatorTest`,
+> `ApiDocsIT`; casos SEC-05/06/07, EVT-04/05, APIDOC-01/02). Matriz de RNF DEV completa: `matriz_rnf.md`.
 
 > **R1.2 — re-certificación estricta completa (4 fases, 2026-07-15):** tras R1.1 se incorporó la
 > **verificación en vivo de endpoints** (curl/Postman sobre `docker-compose.dev.yml` con JWT reales
@@ -44,8 +54,10 @@ pruebas de seguridad server-side.
 | ✅ PASS | **71** |
 | N/A (justificados) | **2** (RN-05/RN-07, imposibles por construcción) |
 | ⏳ Diferido | **0** (BSRCH-02 se cerró tras la certificación con `unaccent`, Flyway V6) |
-| Tests automatizados | **100** · 0 fallos · cobertura ≥ 70 % statements (R1: 82 → R1.1: 98 → R1.2: 100) |
-| Verificación en vivo de endpoints | **10/10 ✅** (curl/Postman sobre Docker Compose, R1.2) |
+| Tests automatizados | **105** · 0 fallos · cobertura ≥ 70 % statements (R1: 82 → R1.1: 98 → R1.2: 100 → R1.3: 105) |
+| Verificación en vivo de endpoints | **10/10 ✅** (curl/Postman sobre Docker Compose; re-verificado en R1.3) |
+| Cadena de suministro (SCA/imagen) | **Trivy en CI, verde** (RNF-08); detectó y cerró 5 CVE críticos → Boot 3.5.16 |
+| RNF de etapa DEV | **16/16 ✅** (`matriz_rnf.md`); diferidos con disparador (`preparacion_produccion.md`) |
 | Lint/formato | 0 Checkstyle · 0 Spotless |
 | Regresión final | **0 regresiones** |
 
