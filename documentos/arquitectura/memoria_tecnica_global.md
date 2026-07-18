@@ -270,7 +270,7 @@ la capa de servicio, y contratos OpenAPI desde la primera versión (RNF-27).
   actions `@v5`) y es **status check requerido** en `main` (bloquea merges rojos). Nota monorepo:
   al sumar servicios, añadir un check "paraguas" para PRs que no toquen `asset-inventory`.
 - **Documentación de arquitectura:** ✅ completa — plan general, memoria técnica global (este
-  doc, **ADR-01..13**), diagrama, estándares, especificación de eventos y protocolo de QA.
+  doc, **ADR-01..17**), diagrama, estándares, especificación de eventos y protocolo de QA.
 - **Contratos:** ✅ 5 contratos OpenAPI de Fase A definidos, validados y **sintonizados con
   estándares de industria** (RFC 7807, probes, Idempotency-Key/ETag, ADR-08..11); **gobernados
   en CI con Spectral** (ADR-12). Catálogo de eventos definido.
