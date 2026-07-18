@@ -29,20 +29,20 @@
 ## 📦 Despliegue
 | Documento | Contenido | Estado |
 |---|---|---|
-| [Plan de salida a producción](despliegue/plan_salida_produccion.md) | Checklist de puesta en producción. | 🕓 |
-| [Runbook de despliegue y operación](despliegue/runbook_despliegue.md) | Despliegue, operación y diagnóstico. | 🕓 |
+| Plan de salida a producción (plantilla: [`templates/despliegue/plan_salida_produccion_TEMPLATE.md`](templates/despliegue/plan_salida_produccion_TEMPLATE.md)) | Checklist de puesta en producción. Verifica la [preparación a producción](arquitectura/preparacion_produccion.md). | 🕓 se genera en **DEPLOY** |
+| Runbook de despliegue y operación (plantilla: [`templates/despliegue/runbook_despliegue_TEMPLATE.md`](templates/despliegue/runbook_despliegue_TEMPLATE.md)) | Despliegue, operación y diagnóstico. | 🕓 se genera en **DEPLOY** |
 
 ## 📖 Guías
 | Documento | Contenido | Estado |
 |---|---|---|
-| [Guía rápida de usuario](guias/guia_rapida_usuario.md) | Uso funcional del dashboard. | 🕓 |
+| Guía rápida de usuario (plantilla: [`templates/proyecto/guia_rapida_usuario_TEMPLATE.md`](templates/proyecto/guia_rapida_usuario_TEMPLATE.md)) | Uso funcional del dashboard. | 🕓 con el `frontend` |
 
 ## 🧰 Otros
 | Recurso | Contenido |
 |---|---|
 | [Kit de plantillas](templates/README.md) | Plantillas reutilizables de documentación. |
 | [Anteproyecto](anteproyecto_microservicios.md) · [Prácticas base](especificaciones_diseño.md) | Contexto histórico del diseño. |
-| [Sesiones](sesiones/) | Bitácora de continuidad entre sesiones. |
+| Sesiones (plantilla: [`templates/sesiones/`](templates/sesiones/)) | Bitácora de continuidad entre sesiones. 🕓 |
 
 ---
 > **Convención:** ante cualquier cambio se aplica el
