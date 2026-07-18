@@ -4,7 +4,7 @@
 **Proyecto:** redSegura — Plataforma de Automatización, Monitoreo y Gestión de Vulnerabilidades de Red
 **Versión del documento:** 1.2.0 · **Fecha:** 2026-07-11 · **Última actualización:** 2026-07-14
 **Autor:** David Reyna Pineda · **Estado del proyecto:** Fundación **completa**; Fase A en curso —
-`asset-inventory-service` implementado (109 tests, CI activo), pendiente su certificación QA de 4 fases
+`asset-inventory-service` implementado (110 tests, CI activo), pendiente su certificación QA de 4 fases
 
 ---
 
