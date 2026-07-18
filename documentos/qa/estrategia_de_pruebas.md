@@ -4,7 +4,7 @@
 > [Protocolo de verificación en 4 fases](protocolo_verificacion_4_fases.md) (el *cómo* de cada ronda)
 > y el [Reporte de QA](reporte_qa.md) (resultados). Este documento define **qué tipos de prueba** debe
 > tener cada servicio y **cómo** se estandarizan, para que todo servicio nuevo nazca con ellas.
-> **Referencia implementada:** `asset-inventory-service` (110 tests + verificación en vivo 10/10).
+> **Referencia implementada:** `asset-inventory-service` (112 tests + verificación en vivo 10/10).
 
 **Última actualización:** 2026-07-15
 
