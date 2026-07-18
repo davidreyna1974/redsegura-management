@@ -42,6 +42,8 @@ Los ítems se anclan a una de estas etapas/condiciones, no a "el final":
 | Secretos externalizados (env var mínimo; **gestor de secretos** en despliegue) | RNF-06 | env var **DEV**; gestor **DEPLOY** | todos | 🟢 env ✅ / 🔵 gestor diferido (DEPLOY) |
 | Alcance de escaneo como control técnico obligatorio | RNF-07 | **DEV** | `scan-orchestrator-service` | 🔵 N/A (otro servicio) |
 | TLS extremo-cliente + segmentación interna | RNF-05 | **DEPLOY** | infra | 🔵 diferido (DEPLOY) |
+| **Contenedor como usuario NO-root** (hardening de imagen) | RNF-05/08 | **DEV** (al haber Dockerfile) | todos | ✅ hecho |
+| **DAST** (escaneo dinámico tipo OWASP ZAP contra el servicio corriendo) | RNF-08 | **PRE-REL** | todos con API | 🔵 diferido (PRE-REL) |
 
 ### 2.2 Cadena de suministro (supply chain)
 
@@ -58,6 +60,8 @@ Los ítems se anclan a una de estas etapas/condiciones, no a "el final":
 | Degradación con gracia ante caída de dependencia no crítica | RNF-11 | **INT-SYNC / GP** | los que dependan de otros | 🔵 diferido (INT-SYNC) |
 | Health probes liveness/readiness | RNF-12 | **DEV** | todos | ✅ hecho |
 | **Entrega garantizada de eventos**: outbox + publisher confirms + relay multi-réplica (SKIP LOCKED) + DLQ | RNF-30 | **DEV** (productor) / **INT-CONS** (idempotencia consumidor) | productores y consumidores de eventos | ✅ hecho |
+| **Graceful shutdown** (drena peticiones + tareas @Async en SIGTERM) | RNF-13 | **DEV** | todos | ✅ hecho |
+| **Retención de datos operativos** (purga de outbox publicado/idempotencia/jobs — evita crecimiento sin límite) | RNF-14 | **DEV** | los que acumulan filas operativas | ✅ hecho |
 
 ### 2.4 Escalabilidad y despliegue
 
@@ -72,9 +76,10 @@ Los ítems se anclan a una de estas etapas/condiciones, no a "el final":
 
 | Ítem | RNF | Disparador | Aplica a | Estado |
 |---|---|---|---|---|
-| Métricas Prometheus | RNF-15 | **DEV** | todos | ✅ hecho |
+| Métricas Prometheus (JVM/HTTP) + **métricas de dominio** (altas, eventos publicados) | RNF-15 | **DEV** | todos | ✅ hecho |
 | Trazas distribuidas con correlación | RNF-16 | **DEV** (instrumentación) / **GP** (propagación entre servicios) | todos | 🟢 instrumentado ✅ / 🔵 export por entorno (DEPLOY) |
 | Logs estructurados sin PII/secretos | RNF-17 | **DEV** | todos | ✅ hecho |
+| **Dashboards (Grafana) + reglas de alerta / SLO** | RNF-15 | **DEPLOY** | todos | 🔵 diferido (DEPLOY) |
 
 ### 2.6 API, calidad y contratos
 
@@ -85,6 +90,7 @@ Los ítems se anclan a una de estas etapas/condiciones, no a "el final":
 | **Swagger UI en runtime** (springdoc) sirviendo el contrato | RNF-27 | **DEV** | todos | ✅ hecho |
 | Contract testing (Pact) consumidor↔productor | RNF-21 | **INT-CONS** | pares consumidor/productor | 🔵 N/A hoy → obligatorio en INT-CONS |
 | Verificación en vivo de endpoints (10/10) | (metodología QA) | **DEV** | todos | ✅ hecho |
+| **Mutation testing** (PIT) para medir la *calidad* de los tests (no solo cobertura) | (calidad) | **opcional** | todos | 🔵 registrado (opcional) |
 
 ### 2.7 Rendimiento
 
@@ -92,6 +98,13 @@ Los ítems se anclan a una de estas etapas/condiciones, no a "el final":
 |---|---|---|---|---|
 | GET p95 < 300 ms verificado con **prueba de carga** | RNF-01 | **PRE-REL** | todos | 🔵 diferido (PRE-REL) |
 | Respaldo de config < 30 s | RNF-02 | **PRE-REL** | `config-backup-service` | 🔵 N/A (otro servicio) |
+
+### 2.8 Operación y gobernanza
+
+| Ítem | RNF | Disparador | Aplica a | Estado |
+|---|---|---|---|---|
+| **Runbook operativo** del servicio (desplegar/rollback/diagnóstico/alertas) | RNF-20 | **DEPLOY** | todos | 🔵 diferido (DEPLOY) — plantilla en `templates/despliegue/runbook_despliegue_TEMPLATE.md` |
+| **LICENSE** del repositorio (hoy "por definir") | — | **decisión** | repos | 🔵 registrado (decisión legal/producto) |
 
 ---
 
