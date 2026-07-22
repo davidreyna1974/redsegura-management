@@ -106,6 +106,18 @@ Los ítems se anclan a una de estas etapas/condiciones, no a "el final":
 | **Runbook operativo** del servicio (desplegar/rollback/diagnóstico/alertas) | RNF-20 | **DEPLOY** | todos | 🔵 diferido (DEPLOY) — plantilla en `templates/despliegue/runbook_despliegue_TEMPLATE.md` |
 | **LICENSE** del repositorio (hoy "por definir") | — | **decisión** | repos | 🔵 registrado (decisión legal/producto) |
 
+### 2.9 Fidelidad de integración con dispositivos de red (servicios con SSH/telemetría)
+
+> Los tests automatizados **mockean** el dispositivo (estándar correcto: herméticos, sin red). Eso deja
+> un hueco de **fidelidad** frente al output real (prompts, paginación, banners, auth, timeouts). Se
+> cierra antes de producción con estos ítems (no bloquean DEV).
+
+| Ítem | RNF | Disparador | Aplica a | Estado |
+|---|---|---|---|---|
+| **Fixtures de output real grabado** (`show running/startup-config` por plataforma) para subir la fidelidad de los dobles | RF-06/RNF-10 | **PRE-REL** | servicios que hacen SSH (`config-backup`, `scan-orchestrator`, `telemetry-collector`) | 🔵 diferido (PRE-REL) |
+| **Matriz de compatibilidad de dispositivos** (vendor × modelo × versión de OS) validada en emulador con **imágenes reales** (GNS3/EVE-NG/CML/Containerlab, **no** Packet Tracer) | RF-06 | **PRE-REL** | servicios que hacen SSH | 🔵 diferido (PRE-REL) |
+| **Smoke pre-producción** contra los dispositivos reales/representativos del cliente antes del go-live | RF-06/RNF-02 | **PRE-REL** | servicios que hacen SSH | 🔵 diferido (PRE-REL) |
+
 ---
 
 ## 3. Leyenda de estado
