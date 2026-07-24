@@ -4,9 +4,9 @@ Reporte consolidado de las campañas de QA por microservicio, bajo el
 [Protocolo de verificación en 4 fases](protocolo_verificacion_4_fases.md).
 
 **Última actualización:** 2026-07-24
-**Resultado global:** ✅ **1 módulo certificado** (`asset-inventory-service`) + **1 módulo implementado
-y revalidado en R2** (`config-backup-service`, pendiente certificación formal 4 fases), 0 bugs
-funcionales sin resolver, 0 regresiones. Resto de microservicios: sin iniciar.
+**Resultado global:** ✅ **2 módulos certificados** (`asset-inventory-service`,
+`config-backup-service`), 0 bugs funcionales sin resolver, 0 regresiones. Resto de microservicios:
+sin iniciar.
 
 ---
 
@@ -110,21 +110,27 @@ del Gateway). `UI/VIS` → repo `frontend`.
   JWT; exportadores de observabilidad por entorno; publisher confirms del outbox; **Pact consumer-driven
   al existir el primer consumidor**; conformidad de respuestas HTTP contra el `openapi.yaml`, opcional).
 
-## `config-backup-service` — 🟡 IMPLEMENTADO · R2 revalidación integral ✅ (pendiente certificación formal 4 fases)
+## `config-backup-service` — ✅ CERTIFICADO · certificación 4 fases (2026-07-24)
 
-**Build:** rama `develop` del repo `backend` (Python 3.12/FastAPI). Detalle completo en
-[`reporte_r2_revalidacion.md` (repo backend)](../../../backend/config-backup-service/documentos/reporte_r2_revalidacion.md).
+**Build:** rama `develop` del repo `backend` (Python 3.12/FastAPI). Detalle en
+[`reporte_certificacion_qa.md`](../../../backend/config-backup-service/documentos/reporte_certificacion_qa.md)
+y [`reporte_r2_revalidacion.md`](../../../backend/config-backup-service/documentos/reporte_r2_revalidacion.md).
 
 - **R1 (2026-07-22):** primera verificación en vivo (14/14 endpoints con JWT reales) durante el
   endurecimiento. **Detectó y corrigió `HALLAZGO-LIVE-CBS-01`**: los hilos de fondo (relay del outbox,
   consumidor) morían ante una caída de conexión al broker sin reconectar → outbox sin drenar. Fix:
   `run_resilient` (reconexión con backoff) + 5 tests de regresión. Origen de la lección **L-QA-07**.
-- **R2 (2026-07-24) — revalidación integral (2ª iteración):** todos los elementos reiniciados a "no
-  verificado" y revalidados desde cero sobre `develop` congelado. Cachés purgadas → gate limpio
-  (**76 tests, 0 fallos, cobertura 94.97 %, 0 lint, 0 errores de tipo**) + **verificación en vivo
-  20/20** + **regresión de resiliencia en vivo** (reinicio de RabbitMQ → el relay sobrevive, reconecta
-  y drena el outbox; `Exception in thread` = 0). **0 hallazgos nuevos, 0 regresiones.**
-- **Pendiente:** ronda formal del Protocolo de 4 fases + commit `chore(qa)` de certificación.
+- **R2 (2026-07-24) — revalidación integral (2ª iteración):** gate limpio (76 tests, 94.97 %) +
+  en vivo 20/20 + regresión de resiliencia (reinicio de RabbitMQ → el relay sobrevive). 0 hallazgos.
+- **Certificación 4 fases (2026-07-24):** **Fase 1** (inventario, código congelado) destapó **2
+  divergencias contrato↔implementación** que R1/R2 no marcaban como fallo (solo validaban lo
+  implementado): `HALLAZGO-QA-CBS-01` (`GET /backups` ignoraba los filtros del contrato
+  hostname/mgmtIp/status/from/to/sort) y `HALLAZGO-QA-CBS-02` (`Idempotency-Key` declarada, no
+  honrada → reintentos duplicaban jobs/schedules). **Fase 2** los corrigió (filtros completos +
+  módulo de idempotencia de escritura con reserva por actor/replay/409, migración 0004; +17 tests).
+  **Fase 3** re-ejecución limpia (**93 tests, cobertura 95 %**) + en vivo 20/20 + 13/13 de los fixes,
+  0 regresiones. **Fase 4** ✅ **CERTIFICADO**. Lección derivada: **L-QA-08** (la certificación formal
+  cazó divergencias contrato↔implementación que la revalidación no vio por validar solo lo construido).
 
 ### 7. Lecciones de QA
 - **L-QA-01 — una restricción de contrato sin handler es un 500 latente:** los `@Max/@Min` en
@@ -174,6 +180,14 @@ seguridad + reproducción): [`verificacion_endpoints.md` (repo backend)](../../.
   meses latentes sin que nada avisara. Forzó subir a Spring Boot 3.5.16. Confirma la tesis del
   proceso: *lo que no se gatea, deriva* — y en cuanto se gatea, aflora la deuda oculta. Un RNF sin
   gate ejecutable es aspiracional.
+- **L-QA-08 — revalidar lo construido ≠ certificar contra el contrato:** en `config-backup-service`
+  las rondas R1/R2 (revalidación) pasaron limpias porque validaban el **comportamiento implementado**;
+  la **Fase 1 de la certificación formal** (inventario caso-por-caso contra el `openapi.yaml`) destapó
+  **2 divergencias contrato↔implementación** que ninguna revalidación había marcado: filtros de
+  listado declarados pero ignorados (resultados silenciosamente incorrectos) y `Idempotency-Key`
+  declarada pero no honrada (reintentos duplicaban efectos). **Regla:** el inventario de la Fase 1 se
+  hace contra el **contrato** (cada parámetro/cabecera/respuesta del OpenAPI = un caso), no contra lo
+  que el código ya hace; un caso sin ✅ PASS bloquea la certificación aunque los tests estén verdes.
 - **L-QA-07 — la resiliencia del *plumbing* asíncrono solo se ve rompiendo la conexión:** en
   `config-backup-service` la verificación en vivo destapó `HALLAZGO-LIVE-CBS-01`: el hilo del relay
   del outbox (y consumidor/scheduler) **moría** ante un reset de conexión de RabbitMQ y no reconectaba
