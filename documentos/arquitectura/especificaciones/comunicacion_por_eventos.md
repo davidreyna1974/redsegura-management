@@ -184,6 +184,12 @@ Todos los eventos comparten esta estructura; lo específico va en `payload`.
 }
 ```
 
+> **Esquema formal + verificación (config.*):** el sobre §3.3 y los payloads §4.2–4.5 están
+> formalizados como **JSON Schema** en `backend/contracts/events/config-event.schema.json`, verificado
+> por `test_config_event_contract` (conformidad productor-side, happy/sad) sobre los eventos que
+> **realmente emite** `config-backup` + broker real (`test_broker`). `version` 1.0.0. El sobre se
+> construye al publicar (el relay envuelve el payload del outbox).
+
 ### 4.6 `compliance.finding_created` — publica `compliance-audit` (RF-14)
 ```json
 {
