@@ -110,7 +110,7 @@ del Gateway). `UI/VIS` → repo `frontend`.
   JWT; exportadores de observabilidad por entorno; publisher confirms del outbox; **Pact consumer-driven
   al existir el primer consumidor**; conformidad de respuestas HTTP contra el `openapi.yaml`, opcional).
 
-## `config-backup-service` — ✅ CERTIFICADO · certificación 4 fases R-C1 + re-certificación R-C2 (2026-07-24)
+## `config-backup-service` — ✅ CERTIFICADO · 4 fases, 3 vueltas R-C1/R-C2/R-C3 (2026-07-24)
 
 **Build:** rama `develop` del repo `backend` (Python 3.12/FastAPI). Detalle en
 [`reporte_certificacion_qa.md`](../../../backend/config-backup-service/documentos/reporte_certificacion_qa.md)
@@ -136,6 +136,15 @@ y [`reporte_r2_revalidacion.md`](../../../backend/config-backup-service/document
   todos los elementos partiendo de "no validado": **Fase 1** 0 hallazgos (63 casos ✅, conformidad
   13/13 operaciones, 0 parámetros sin honrar) → **Fase 2** sin correcciones → **Fase 3** gate limpio
   (**99 tests, cobertura 95 %**) + en vivo 20/20 + 13/13 → **Fase 4** ✅ **CERTIFICADO, 0 regresiones**.
+- **Certificación 4 fases — R-C3 (3ª vuelta, 2026-07-24, commit `81bd1c6`):** re-certificación tras
+  cerrar la conformidad de contrato de **eventos producidos** (`HALLAZGO-EVT-CBS-01`: los `config.*`
+  se publicaban sin el sobre común y con payloads que no coincidían con el catálogo — la 3.ª cara del
+  contrato que ningún gate vigilaba). Se añadió `config-event.schema.json` + test de conformidad
+  productor-side. Ronda íntegra desde "no validado": **Fase 1** 0 hallazgos (68 casos ✅; conformidad
+  API 13/13 + eventos 4/4 tipos) → **Fase 2** sin correcciones → **Fase 3** gate limpio (**105 tests,
+  cobertura 95 %**) + en vivo 20/20 + 13/13 + **envelope de eventos verificado en el broker** →
+  **Fase 4** ✅ **CERTIFICADO, 0 regresiones**. Con esto las **3 caras del contrato** (API, eventos
+  consumidos, eventos producidos) tienen gate ejecutable.
 
 ### 7. Lecciones de QA
 - **L-QA-01 — una restricción de contrato sin handler es un 500 latente:** los `@Max/@Min` en
