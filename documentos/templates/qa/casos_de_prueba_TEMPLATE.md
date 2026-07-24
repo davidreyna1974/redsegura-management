@@ -4,6 +4,17 @@
      Debe existir al menos un caso por cada categoría aplicable, por cada pantalla/unidad.
      Un módulo NO está "done" mientras haya casos sin estado ✅ PASS. -->
 
+> **⚠️ Cobertura de contrato OBLIGATORIA (lección L-QA-08).** Para servicios con `openapi.yaml`, el
+> criterio de aceptación es el **contrato**, no lo que el código termine haciendo. Antes de codificar,
+> **cada operación, cada parámetro de query, cada cabecera y cada código de respuesta declarados en el
+> `openapi.yaml` deben tener su(s) caso(s) aquí.** Un parámetro declarado que no se implemente es un
+> bug silencioso (resultados incorrectos sin error). Se refuerza con **dos gates ejecutables**:
+> 1. **Test de conformidad contrato↔implementación** (`tests/test_contract_conformance.py`, patrón de
+>    `config-backup-service`): falla en CI si la impl no honra un parámetro/cabecera/operación del
+>    contrato. **Obligatorio en todo servicio con contrato.**
+> 2. **Gate anti-⏳** (`scripts/check_casos_completos.py`, exigido al liberar a `main`): ningún caso
+>    puede quedar en ⏳ al declarar el servicio "done".
+
 **Módulo:** <...> · **Ronda:** <R1> · **Fecha:** <YYYY-MM-DD> · **Versión de código:** <commit/tag>
 
 ## Formato
@@ -30,8 +41,10 @@
 | `EMPTY` | Estados vacíos: sin datos iniciales vs sin resultados de búsqueda |
 | `VIS` | Visual: colores, espaciado, truncado, tooltips, responsive |
 | `CYBER` | Ciberseguridad básica (OWASP ASVS L1): inyección, autorización server-side, redacción de campos |
+| `CONF` | **Conformidad de contrato**: cada operación/parámetro/cabecera/código de respuesta del `openapi.yaml` está implementado y se comporta como declara (filtro que filtra, cabecera que se honra). Respaldado por `test_contract_conformance.py`. |
 
-<!-- GUÍA: para proyectos sin UI (API/CLI/datos), UI/VIS suelen ser N/A; refuerza SEC/RBAC/RN/ERR/CYBER. -->
+<!-- GUÍA: para proyectos sin UI (API/CLI/datos), UI/VIS suelen ser N/A; refuerza SEC/RBAC/RN/ERR/CYBER/CONF.
+     Para servicios con contrato, CONF es OBLIGATORIA: un caso por cada param/cabecera/respuesta declarados. -->
 
 ## Casos
 

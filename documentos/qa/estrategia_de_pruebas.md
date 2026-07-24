@@ -16,7 +16,7 @@
 |---|---|---|---|
 | **Unit** | Lógica de dominio aislada, sin BD ni red | JUnit 5 + AssertJ | pytest |
 | **Integración** | Interacción con dependencias **reales** (BD/broker), sin mocks de infraestructura | **Testcontainers** (PostgreSQL/RabbitMQ) + MockMvc | `testcontainers-python` + `httpx`/TestClient |
-| **Conformidad de contrato — API** | Que las respuestas cumplen el `openapi.yaml` propio | `swagger-request-validator` (opcional) | `schemathesis` / validación OpenAPI |
+| **Conformidad de contrato↔impl — API** (OBLIGATORIA, L-QA-08) | Que la implementación **honra CADA** operación/parámetro/cabecera/respuesta del `openapi.yaml` (no que el código "haga algo": que cumpla lo declarado). Un parámetro declarado e ignorado es un bug silencioso. | **contract-first con openapi-generator** (la interfaz de API se genera del contrato → omitir un parámetro es imposible por construcción; `asset-inventory`). Aun así, verificar que el *comportamiento* del parámetro se implementa (p. ej. el filtro filtra). | **code-first**: `tests/test_contract_conformance.py` (openapi.yaml ⊆ `app.openapi()`, con dientes); `schemathesis` como fuzz complementario. |
 | **Conformidad de contrato — eventos** | Que el payload emitido cumple su **JSON Schema** compartido | `json-schema-validator` (networknt) | `jsonschema` |
 | **Aceptación (BDD)** | Reglas de negocio en lenguaje del cliente (base de la UAT) | **Cucumber** (Gherkin español) | `behave` / `pytest-bdd` |
 | **Contrato consumidor↔productor** | Que un servicio no rompe lo que otro consume | **Pact** (cuando exista el par consumidor/productor) | Pact-python |
