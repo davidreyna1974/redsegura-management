@@ -110,7 +110,7 @@ del Gateway). `UI/VIS` → repo `frontend`.
   JWT; exportadores de observabilidad por entorno; publisher confirms del outbox; **Pact consumer-driven
   al existir el primer consumidor**; conformidad de respuestas HTTP contra el `openapi.yaml`, opcional).
 
-## `config-backup-service` — ✅ CERTIFICADO · certificación 4 fases (2026-07-24)
+## `config-backup-service` — ✅ CERTIFICADO · certificación 4 fases R-C1 + re-certificación R-C2 (2026-07-24)
 
 **Build:** rama `develop` del repo `backend` (Python 3.12/FastAPI). Detalle en
 [`reporte_certificacion_qa.md`](../../../backend/config-backup-service/documentos/reporte_certificacion_qa.md)
@@ -122,15 +122,20 @@ y [`reporte_r2_revalidacion.md`](../../../backend/config-backup-service/document
   `run_resilient` (reconexión con backoff) + 5 tests de regresión. Origen de la lección **L-QA-07**.
 - **R2 (2026-07-24) — revalidación integral (2ª iteración):** gate limpio (76 tests, 94.97 %) +
   en vivo 20/20 + regresión de resiliencia (reinicio de RabbitMQ → el relay sobrevive). 0 hallazgos.
-- **Certificación 4 fases (2026-07-24):** **Fase 1** (inventario, código congelado) destapó **2
-  divergencias contrato↔implementación** que R1/R2 no marcaban como fallo (solo validaban lo
-  implementado): `HALLAZGO-QA-CBS-01` (`GET /backups` ignoraba los filtros del contrato
+- **Certificación 4 fases — R-C1 (1ª vuelta, 2026-07-24):** **Fase 1** (inventario, código congelado)
+  destapó **2 divergencias contrato↔implementación** que R1/R2 no marcaban como fallo (solo validaban
+  lo implementado): `HALLAZGO-QA-CBS-01` (`GET /backups` ignoraba los filtros del contrato
   hostname/mgmtIp/status/from/to/sort) y `HALLAZGO-QA-CBS-02` (`Idempotency-Key` declarada, no
   honrada → reintentos duplicaban jobs/schedules). **Fase 2** los corrigió (filtros completos +
   módulo de idempotencia de escritura con reserva por actor/replay/409, migración 0004; +17 tests).
-  **Fase 3** re-ejecución limpia (**93 tests, cobertura 95 %**) + en vivo 20/20 + 13/13 de los fixes,
-  0 regresiones. **Fase 4** ✅ **CERTIFICADO**. Lección derivada: **L-QA-08** (la certificación formal
-  cazó divergencias contrato↔implementación que la revalidación no vio por validar solo lo construido).
+  **Fase 3** re-ejecución limpia (93 tests, 95 %) + en vivo 20/20 + 13/13 de los fixes, 0 regresiones.
+  **Fase 4** ✅ **CERTIFICADO**. Lección derivada: **L-QA-08**.
+- **Certificación 4 fases — R-C2 (2ª vuelta, 2026-07-24, commit `ceb48a8`):** re-certificación tras
+  incorporar los **3 gates de prevención** (test de conformidad contrato↔impl, gate anti-⏳,
+  reglas de templates/DoD) y la **aceptación BDD** (pytest-bdd). Ronda íntegra sobre código congelado,
+  todos los elementos partiendo de "no validado": **Fase 1** 0 hallazgos (63 casos ✅, conformidad
+  13/13 operaciones, 0 parámetros sin honrar) → **Fase 2** sin correcciones → **Fase 3** gate limpio
+  (**99 tests, cobertura 95 %**) + en vivo 20/20 + 13/13 → **Fase 4** ✅ **CERTIFICADO, 0 regresiones**.
 
 ### 7. Lecciones de QA
 - **L-QA-01 — una restricción de contrato sin handler es un 500 latente:** los `@Max/@Min` en
