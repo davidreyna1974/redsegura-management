@@ -24,6 +24,16 @@
 | <Lista de X> | <pantalla/endpoint> | <...> | <ROL_A, ROL_B> |
 | <Detalle/Form X> | <...> | <...> | <...> |
 
+<!-- GUÍA (servicios con openapi.yaml): el contrato es el alcance. Enumera aquí **toda** su superficie
+     —operaciones, parámetros de query, cabeceras (Idempotency-Key, If-Match…) y códigos de respuesta—
+     y verifica que cada uno se implementará y tendrá su caso `CONF` en casos_de_prueba (L-QA-08). No
+     dejes parámetros declarados "para después": un parámetro en el contrato sin implementar es un bug
+     silencioso que el gate `test_contract_conformance.py` hará fallar. -->
+
+| Parámetro/cabecera/respuesta declarados en el contrato | ¿Se implementa en este alcance? | Caso CONF |
+|---|---|---|
+| <p. ej. GET /x?status,from,to,sort · header Idempotency-Key · 409> | sí / diferido (con caso ⏳ y disparador) | CONF-01… |
+
 ## 4. Contratos con dependencias (verificados)
 
 <!-- GUÍA: NO asumir nombres de campos ni códigos. Verificar contra Swagger/código/esquema real. -->

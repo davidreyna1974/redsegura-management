@@ -14,8 +14,11 @@
 
 ### FASE 1 — Inventario (código congelado)
 - Ejecutar TODOS los casos de TODOS los módulos sin tocar código.
-- Documentar cada bug con estado `⚠️ ABIERTO`. **No corregir nada.**
-- Objetivo: conocer el estado real del sistema.
+- **Inventario contra el CONTRATO, no contra el código (L-QA-08):** para servicios con `openapi.yaml`,
+  recorrer cada operación/parámetro/cabecera/respuesta declarados y confirmar que hay un caso ✅ PASS.
+  Un parámetro declarado que el código ignore es un bug aunque los tests estén verdes.
+- Documentar cada bug/hueco con estado `⚠️ ABIERTO`. **No corregir nada.**
+- Objetivo: conocer el estado real del sistema frente al contrato.
 
 ### FASE 2 — Corrección + gatekeeper
 - Corregir los bugs del inventario en ciclo normal de desarrollo.

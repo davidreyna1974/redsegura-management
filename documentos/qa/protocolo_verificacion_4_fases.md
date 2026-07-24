@@ -32,8 +32,13 @@ sabe si pasaron sobre el código final o sobre el previo).
 
 ### FASE 1 — Inventario (código congelado)
 - Ejecutar **todos** los casos de prueba del alcance, **sin tocar código**.
-- Documentar cada bug con estado `⚠️ ABIERTO`. **No corregir nada.**
-- Objetivo: conocer el estado real del sistema antes de intervenir.
+- **El inventario se hace contra el CONTRATO, no contra lo que el código ya hace (L-QA-08):** para
+  servicios con `openapi.yaml`, recorrer **cada operación, parámetro de query, cabecera y código de
+  respuesta declarados** y confirmar que existe un caso que lo cubre y está en ✅ PASS. Un parámetro
+  declarado que el código ignore es un bug aunque los tests estén verdes (una funcionalidad ausente no
+  tiene test que falle). El test `test_contract_conformance.py` mecaniza este chequeo.
+- Documentar cada bug/hueco con estado `⚠️ ABIERTO`. **No corregir nada.**
+- Objetivo: conocer el estado real del sistema **frente al contrato** antes de intervenir.
 
 ### FASE 2 — Corrección + gatekeeper
 - Corregir los bugs del inventario en ciclo normal de desarrollo (rama `fix/…`).
