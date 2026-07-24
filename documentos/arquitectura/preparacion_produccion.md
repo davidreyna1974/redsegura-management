@@ -97,7 +97,7 @@ Los ítems se anclan a una de estas etapas/condiciones, no a "el final":
 | Ítem | RNF | Disparador | Aplica a | Estado |
 |---|---|---|---|---|
 | GET p95 < 300 ms verificado con **prueba de carga** | RNF-01 | **PRE-REL** | todos | 🔵 diferido (PRE-REL) |
-| Respaldo de config < 30 s | RNF-02 | **PRE-REL** | `config-backup-service` | 🔵 N/A (otro servicio) |
+| Respaldo de config < 30 s verificado con prueba de carga | RNF-02 | **PRE-REL** | `config-backup-service` | 🔵 diferido (PRE-REL) — el servicio ya existe; medir end-to-end SSH+Git bajo carga |
 
 ### 2.8 Operación y gobernanza
 
@@ -117,6 +117,20 @@ Los ítems se anclan a una de estas etapas/condiciones, no a "el final":
 | **Fixtures de output real grabado** (`show running/startup-config` por plataforma) para subir la fidelidad de los dobles | RF-06/RNF-10 | **PRE-REL** | servicios que hacen SSH (`config-backup`, `scan-orchestrator`, `telemetry-collector`) | 🔵 diferido (PRE-REL) |
 | **Matriz de compatibilidad de dispositivos** (vendor × modelo × versión de OS) validada en emulador con **imágenes reales** (GNS3/EVE-NG/CML/Containerlab, **no** Packet Tracer) | RF-06 | **PRE-REL** | servicios que hacen SSH | 🔵 diferido (PRE-REL) |
 | **Smoke pre-producción** contra los dispositivos reales/representativos del cliente antes del go-live | RF-06/RNF-02 | **PRE-REL** | servicios que hacen SSH | 🔵 diferido (PRE-REL) |
+
+### 2.10 Seguridad de las configuraciones almacenadas (config-as-code)
+
+> Las `running-config`/`startup-config` de red **contienen secretos** (`enable secret`, `snmp-server
+> community`, `username … password`, claves pre-compartidas). El estándar de la industria de gestión
+> de configuraciones (RANCID/Oxidized/NetBox) **almacena la config completa** —se necesita íntegra
+> para restaurar y auditar; redactarla rompería el drift y el restore— y protege el secreto **en la
+> capa de almacenamiento y de exposición**, no borrándolo. Controles requeridos antes de producción:
+
+| Ítem | RNF | Disparador | Aplica a | Estado |
+|---|---|---|---|---|
+| **Cifrado at-rest + control de acceso** del repositorio Git interno de configuraciones (volumen cifrado / repo restringido) | RNF-05/06 | **DEPLOY** | `config-backup-service` | 🔵 diferido (DEPLOY) — la config se guarda completa a propósito; el control es cifrado+acceso |
+| **No exposición de secretos fuera de su rol**: el contenido de config (endpoint `diff`, eventos) solo a roles autorizados; nunca en logs (RNF-17 ✅) | RNF-06/17 | **DEV** (rol) / **DEPLOY** (cifrado) | `config-backup-service` | 🟢 RBAC en `diff` (ADM/OPE/AUD) + logs redactados ✅ / 🔵 cifrado at-rest (DEPLOY) |
+| **Aceptación BDD** (Gherkin, base de la UAT) de las reglas de negocio del servicio | RNF-20 | **DEV** | todos (patrón E) | ✅ `config-backup` (pytest-bdd) · ✅ `asset-inventory` (Cucumber) |
 
 ---
 
