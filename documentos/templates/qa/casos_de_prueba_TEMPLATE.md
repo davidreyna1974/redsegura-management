@@ -65,11 +65,24 @@
 
 ## Patrones que han causado bugs reales (revisar siempre)
 
+**Frontend/UI:**
 - Botón de guardar en edición habilitado sin cambios → exigir formulario "dirty".
 - Acciones en filas clicables sin detener la propagación del evento → click burbujea y navega.
 - Botón "Consultar" con rango de fechas inválido (desde > hasta) no deshabilitado.
 - Campo de sólo-lectura "bloqueado" visualmente pero editable (no deshabilitado de verdad).
 - Dato sensible oculto con CSS pero presente en el DOM/respuesta.
+
+**Backend/API (cazados por la verificación EN VIVO, no por los tests automatizados):**
+- **PUT que no reemplaza de verdad** (`HALLAZGO-LIVE-01`): `PUT` que delega en el merge de `PATCH`
+  no nulifica los campos omitidos → no cumple RFC 9110 (reemplazo completo). El test no lo cazaba
+  porque reenviaba todos los valores en vez de omitir uno. Probar PUT **omitiendo** un campo opcional.
+- **Hilo de fondo que muere ante caída de conexión** (`HALLAZGO-LIVE-CBS-01`): consumidor/relay/
+  scheduler que no reconectan tras un reset del broker/BD → el trabajo de fondo (drenar el outbox,
+  consumir eventos) se detiene permanentemente. Los tests con Testcontainers no lo exponen (no
+  simulan cortes de conexión). Probar **reiniciando el broker/BD** en vivo y verificando que el hilo
+  sobrevive (reconexión con backoff) y reanuda.
+- **Semántica HTTP asumida:** 202 vs 201, aislamiento de tipo en recursos polimórficos (un `jobId` de
+  un tipo no debe resolver en la ruta de otro), `problem+json` en TODOS los errores (no solo algunos).
 
 ## Resumen de la ronda
 

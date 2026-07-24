@@ -41,8 +41,14 @@
 
 **Por qué es obligatoria (lección `L-QA-05`).** En `asset-inventory-service`, esta pasada detectó
 `HALLAZGO-LIVE-01` (PUT no cumplía reemplazo completo RFC 9110) que la suite automatizada **no**
-cazaba porque el test reenviaba los mismos valores en vez de omitir un campo. La verificación en vivo
-es la red de seguridad contra defectos de semántica HTTP, de despliegue y de configuración.
+cazaba porque el test reenviaba los mismos valores en vez de omitir un campo. En
+`config-backup-service` detectó `HALLAZGO-LIVE-CBS-01`: los hilos de fondo (relay del outbox,
+consumidor de eventos) **morían ante una caída de conexión al broker** y no reconectaban, deteniendo
+el trabajo asíncrono; los tests con Testcontainers no lo exponen porque no simulan cortes de
+conexión — solo se ve **reiniciando el broker en vivo**. La verificación en vivo es la red de
+seguridad contra defectos de semántica HTTP, de **resiliencia del *plumbing* asíncrono**, de
+despliegue y de configuración. Regla derivada: **todo bucle de fondo sobre una conexión externa
+(broker/BD) debe probarse contra una caída y recuperación de esa conexión.**
 
 **Alcance mínimo (todos los servicios):**
 1. **Cobertura total de endpoints:** los **N/N** del `openapi.yaml` (o de la API del servicio),

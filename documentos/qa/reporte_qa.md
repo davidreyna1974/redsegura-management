@@ -3,9 +3,10 @@
 Reporte consolidado de las campañas de QA por microservicio, bajo el
 [Protocolo de verificación en 4 fases](protocolo_verificacion_4_fases.md).
 
-**Última actualización:** 2026-07-17
-**Resultado global:** ✅ **1 módulo certificado** (`asset-inventory-service`), 0 bugs funcionales sin
-resolver, 0 regresiones. Resto de microservicios: sin iniciar.
+**Última actualización:** 2026-07-24
+**Resultado global:** ✅ **1 módulo certificado** (`asset-inventory-service`) + **1 módulo implementado
+y revalidado en R2** (`config-backup-service`, pendiente certificación formal 4 fases), 0 bugs
+funcionales sin resolver, 0 regresiones. Resto de microservicios: sin iniciar.
 
 ---
 
@@ -109,6 +110,22 @@ del Gateway). `UI/VIS` → repo `frontend`.
   JWT; exportadores de observabilidad por entorno; publisher confirms del outbox; **Pact consumer-driven
   al existir el primer consumidor**; conformidad de respuestas HTTP contra el `openapi.yaml`, opcional).
 
+## `config-backup-service` — 🟡 IMPLEMENTADO · R2 revalidación integral ✅ (pendiente certificación formal 4 fases)
+
+**Build:** rama `develop` del repo `backend` (Python 3.12/FastAPI). Detalle completo en
+[`reporte_r2_revalidacion.md` (repo backend)](../../../backend/config-backup-service/documentos/reporte_r2_revalidacion.md).
+
+- **R1 (2026-07-22):** primera verificación en vivo (14/14 endpoints con JWT reales) durante el
+  endurecimiento. **Detectó y corrigió `HALLAZGO-LIVE-CBS-01`**: los hilos de fondo (relay del outbox,
+  consumidor) morían ante una caída de conexión al broker sin reconectar → outbox sin drenar. Fix:
+  `run_resilient` (reconexión con backoff) + 5 tests de regresión. Origen de la lección **L-QA-07**.
+- **R2 (2026-07-24) — revalidación integral (2ª iteración):** todos los elementos reiniciados a "no
+  verificado" y revalidados desde cero sobre `develop` congelado. Cachés purgadas → gate limpio
+  (**76 tests, 0 fallos, cobertura 94.97 %, 0 lint, 0 errores de tipo**) + **verificación en vivo
+  20/20** + **regresión de resiliencia en vivo** (reinicio de RabbitMQ → el relay sobrevive, reconecta
+  y drena el outbox; `Exception in thread` = 0). **0 hallazgos nuevos, 0 regresiones.**
+- **Pendiente:** ronda formal del Protocolo de 4 fases + commit `chore(qa)` de certificación.
+
 ### 7. Lecciones de QA
 - **L-QA-01 — una restricción de contrato sin handler es un 500 latente:** los `@Max/@Min` en
   parámetros lanzan `ConstraintViolationException`; hay que manejarla explícitamente (→ 422) o se
@@ -157,3 +174,12 @@ seguridad + reproducción): [`verificacion_endpoints.md` (repo backend)](../../.
   meses latentes sin que nada avisara. Forzó subir a Spring Boot 3.5.16. Confirma la tesis del
   proceso: *lo que no se gatea, deriva* — y en cuanto se gatea, aflora la deuda oculta. Un RNF sin
   gate ejecutable es aspiracional.
+- **L-QA-07 — la resiliencia del *plumbing* asíncrono solo se ve rompiendo la conexión:** en
+  `config-backup-service` la verificación en vivo destapó `HALLAZGO-LIVE-CBS-01`: el hilo del relay
+  del outbox (y consumidor/scheduler) **moría** ante un reset de conexión de RabbitMQ y no reconectaba
+  → el outbox dejaba de drenarse permanentemente. Los tests con Testcontainers verifican la *lógica*
+  de entrega pero **no** la supervivencia del bucle ante una caída de conexión (no la simulan). **Fix:**
+  `run_resilient` (reconexión con backoff exponencial ante errores recuperables) envolviendo cada hilo
+  de fondo; **5 tests de regresión** + re-verificación en vivo reiniciando el broker. **Regla:** todo
+  bucle de fondo sobre una conexión externa (broker/BD) se prueba contra su caída y recuperación; si
+  el proceso lanza hilos daemon de larga vida, cada uno debe auto-recuperarse, no morir.
