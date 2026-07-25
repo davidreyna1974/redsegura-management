@@ -21,6 +21,10 @@
 | **Aceptación (BDD)** | Reglas de negocio en lenguaje del cliente (base de la UAT) | **Cucumber** (Gherkin español) | `behave` / `pytest-bdd` |
 | **Contrato consumidor↔productor** | Que un servicio no rompe lo que otro consume | **Pact** (cuando exista el par consumidor/productor) | Pact-python |
 | **Verificación en vivo de endpoints** | Que **todos** los endpoints responden sobre el **artefacto empaquetado y desplegado** (no solo en el harness de test), con auth y dependencias reales | curl / **colección Postman** contra `docker-compose.dev.yml` | curl / Postman contra `docker-compose.dev.yml` |
+| **Integración cross-service (golden path)** | Que la interacción **real entre dos+ servicios** funciona ensamblada (evento producido por uno → enrutado por el broker → consumido/proyectado por el otro; ambos reales, dos BD, JWT reales). Complementa Pact (que valida el contrato en aislamiento). | ambos servicios sobre `docker-compose.dev.yml` + broker + Keycloak; diseño y reporte por golden path | ídem (poliglota) |
+
+> **Golden paths documentados** (diseño + reporte, un archivo por interacción): `asset-inventory` →
+> `config-backup` en [`golden_path_asset_config-backup.md`](golden_path_asset_config-backup.md).
 
 **Reglas transversales:**
 - **Cobertura mínima ≥ 70 % statements** por servicio (gate del `mvn verify` / `pytest --cov`).
