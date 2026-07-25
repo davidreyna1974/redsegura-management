@@ -6,7 +6,7 @@ Reporte consolidado de las campañas de QA por microservicio, bajo el
 **Última actualización:** 2026-07-25
 **Resultado global:** ✅ **2 módulos certificados** (`asset-inventory-service`,
 `config-backup-service`) + **1.er golden path event-driven validado** (`asset-inventory` →
-`config-backup`, 6/6 pasos, [`golden_path_asset_config-backup.md`](golden_path_asset_config-backup.md)),
+`config-backup`, 6/6 pasos, [`golden_path_asset_config-backup.md`](../../../backend/documentos/integracion/golden_path_asset_config-backup.md)),
 0 bugs funcionales sin resolver, 0 regresiones. Resto de microservicios: sin iniciar.
 
 ---
@@ -195,6 +195,16 @@ seguridad + reproducción): [`verificacion_endpoints.md` (repo backend)](../../.
   meses latentes sin que nada avisara. Forzó subir a Spring Boot 3.5.16. Confirma la tesis del
   proceso: *lo que no se gatea, deriva* — y en cuanto se gatea, aflora la deuda oculta. Un RNF sin
   gate ejecutable es aspiracional.
+- **L-QA-09 — Pact valida el contrato, no el sistema ensamblado:** el contract testing (Pact/JSON
+  Schema, RNF-21) verifica cada lado de una interacción **en aislamiento** (contra un esquema
+  compartido, con dobles). **No** prueba que el evento que produce un servicio, publicado por **su**
+  relay a un broker **real**, sea enrutado por el exchange correcto y **consumido y proyectado** por
+  el **otro** servicio real, con sus dos BD independientes y su seguridad. Esa clase de fallo (nombres
+  de exchange/routing distintos, sobre divergente, campos que no casan, colas mal ligadas, consistencia
+  que no converge) **solo aparece al integrar en vivo**. Por eso la **integración cross-service (golden
+  path) es obligatoria por vector** (RNF-32): cada interacción microservicio↔microservicio se valida
+  end-to-end sobre el artefacto desplegado, y un gatekeeper (`check_golden_paths.py`) lo obliga en el
+  release. Primera evidencia: `asset-inventory`→`config-backup` (6/6 pasos, 0 hallazgos).
 - **L-QA-08 — revalidar lo construido ≠ certificar contra el contrato:** en `config-backup-service`
   las rondas R1/R2 (revalidación) pasaron limpias porque validaban el **comportamiento implementado**;
   la **Fase 1 de la certificación formal** (inventario caso-por-caso contra el `openapi.yaml`) destapó

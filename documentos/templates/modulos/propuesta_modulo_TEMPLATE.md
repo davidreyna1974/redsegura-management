@@ -47,6 +47,18 @@ Interfaces/DTOs relevantes:
 <define aquí los tipos con nombres EXACTOS del backend/dependencia>
 ```
 
+### 4.1 Vectores de interacción con otros microservicios (RNF-32)
+
+<!-- GUÍA: declara AQUÍ, antes de codificar, cada interacción con OTRO microservicio (evento que
+     produces→consume otro, evento que consumes de otro, o llamada API). Cada vector (una dirección)
+     requiere: (a) su fila en `backend/documentos/integracion/matriz_interaccion.md`, y (b) su golden
+     path (validación en vivo e2e) cuando la contraparte exista. Si interactúas con varios, una fila
+     por cada uno. El gate `check_golden_paths.py` lo obliga en release. -->
+
+| Vector (este servicio → / ← otro) | Tipo (evento/API) | Mecanismo | ¿Contraparte existe? | Golden path |
+|---|---|---|---|---|
+| <p. ej. este → alerting> | evento | `config.*` (RabbitMQ) | sí / no (DIFERIDO) | <archivo o —> |
+
 ## 5. Reglas de negocio
 
 - RN1: <regla> → rechazo con código/mensaje <...>.

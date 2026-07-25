@@ -70,6 +70,11 @@ sabe si pasaron sobre el código final o sobre el previo).
   desplegado en `docker-compose.dev.yml` (auth y dependencias reales). Prueba lo que el harness no
   cubre (imagen, arranque, config/secretos, JWT reales, red entre contenedores). Ver
   `estrategia_de_pruebas.md §1b`. Todo hallazgo → Fase 2 + test de regresión automatizado.
+- **Integración cross-service (golden path, obligatoria — RNF-32):** por cada vector de interacción
+  con **otro microservicio ya construido**, ejecutar su golden path e2e (ambos servicios reales sobre
+  Docker Compose) y registrar resultados. Los vectores viven en
+  `backend/documentos/integracion/matriz_interaccion.md`; lo obliga `scripts/check_golden_paths.py`.
+  Vectores cuya contraparte no existe → DIFERIDO. Ver `estrategia_de_pruebas.md` (tipo de test).
 
 ### FASE 4 — Certificación
 - Gatekeeper completo del servicio: build + tests con cobertura **≥ 70 % statements**, 0 fallos,
