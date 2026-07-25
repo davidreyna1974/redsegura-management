@@ -110,12 +110,21 @@ Los ítems se anclan a una de estas etapas/condiciones, no a "el final":
 
 > Los tests automatizados **mockean** el dispositivo (estándar correcto: herméticos, sin red). Eso deja
 > un hueco de **fidelidad** frente al output real (prompts, paginación, banners, auth, timeouts). Se
-> cierra antes de producción con estos ítems (no bloquean DEV).
+> cierra en **dos etapas** con la **herramienta adecuada a cada propósito** (ver tabla de herramientas).
+
+**Herramienta por propósito (regla de decisión):**
+
+| Propósito | Herramienta recomendada | Por qué | Etapa |
+|---|---|---|---|
+| **Smoke de mecanismo automatizable** (que un backup real tenga **éxito**: SSH → fetch → Git → drift, contra un dispositivo real emulado) | **Containerlab** + un **NOS libre y contenedor-nativo** (Nokia SR Linux, Arista cEOS, VyOS, FRR) | Nativo de contenedores, topología declarativa, **automatizable en CI**; imágenes libres sin licencia | **DEV/INT-SYNC** (posible ya) |
+| **Matriz de compatibilidad por vendor** (Cisco IOS/NX-OS, Juniper…: prompts, paginación, comandos exactos por plataforma) | **GNS3 / CML / EVE-NG** con **imágenes reales del vendor** (IOSv/IOL/vEOS…) | Fidelidad de CLI del vendor objetivo; las imágenes son **licenciadas** (no redistribuibles en CI) → lab manual | **PRE-REL** |
+| **Simulador de baja fidelidad** | ~~Packet Tracer~~ | **No usar** para automatización: no expone SSH/CLI reales fieles | — |
 
 | Ítem | RNF | Disparador | Aplica a | Estado |
 |---|---|---|---|---|
-| **Fixtures de output real grabado** (`show running/startup-config` por plataforma) para subir la fidelidad de los dobles | RF-06/RNF-10 | **PRE-REL** | servicios que hacen SSH (`config-backup`, `scan-orchestrator`, `telemetry-collector`) | 🔵 diferido (PRE-REL) |
-| **Matriz de compatibilidad de dispositivos** (vendor × modelo × versión de OS) validada en emulador con **imágenes reales** (GNS3/EVE-NG/CML/Containerlab, **no** Packet Tracer) | RF-06 | **PRE-REL** | servicios que hacen SSH | 🔵 diferido (PRE-REL) |
+| **Smoke de mecanismo con Containerlab** (backup **exitoso** contra un NOS libre emulado con IP en el CIDR autorizado, RNF-07): valida el camino SSH→Git→drift real, no solo el mock. **Acota:** valida el *mecanismo*, no la CLI del vendor objetivo (Cisco) | RF-06/07/09/10 | **DEV/INT-SYNC** (viable ahora) | servicios que hacen SSH (`config-backup`, `scan-orchestrator`, `telemetry-collector`) | 🔵 diferido con disparador (viable ya; ver consulta 2026-07-25) |
+| **Fixtures de output real grabado** (`show running/startup-config` por plataforma **del vendor objetivo**) para subir la fidelidad de los dobles | RF-06/RNF-10 | **PRE-REL** | servicios que hacen SSH | 🔵 diferido (PRE-REL) |
+| **Matriz de compatibilidad de dispositivos** (vendor × modelo × versión de OS) validada en emulador con **imágenes reales del vendor** (GNS3/EVE-NG/CML, **no** Packet Tracer) | RF-06 | **PRE-REL** | servicios que hacen SSH | 🔵 diferido (PRE-REL) |
 | **Smoke pre-producción** contra los dispositivos reales/representativos del cliente antes del go-live | RF-06/RNF-02 | **PRE-REL** | servicios que hacen SSH | 🔵 diferido (PRE-REL) |
 
 ### 2.10 Seguridad de las configuraciones almacenadas (config-as-code)
