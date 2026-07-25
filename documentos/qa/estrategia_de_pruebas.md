@@ -21,10 +21,14 @@
 | **Aceptación (BDD)** | Reglas de negocio en lenguaje del cliente (base de la UAT) | **Cucumber** (Gherkin español) | `behave` / `pytest-bdd` |
 | **Contrato consumidor↔productor** | Que un servicio no rompe lo que otro consume | **Pact** (cuando exista el par consumidor/productor) | Pact-python |
 | **Verificación en vivo de endpoints** | Que **todos** los endpoints responden sobre el **artefacto empaquetado y desplegado** (no solo en el harness de test), con auth y dependencias reales | curl / **colección Postman** contra `docker-compose.dev.yml` | curl / Postman contra `docker-compose.dev.yml` |
-| **Integración cross-service (golden path)** | Que la interacción **real entre dos+ servicios** funciona ensamblada (evento producido por uno → enrutado por el broker → consumido/proyectado por el otro; ambos reales, dos BD, JWT reales). Complementa Pact (que valida el contrato en aislamiento). | ambos servicios sobre `docker-compose.dev.yml` + broker + Keycloak; diseño y reporte por golden path | ídem (poliglota) |
+| **Integración cross-service (golden path) — OBLIGATORIA, RNF-32/L-QA-09** | Que la interacción **real entre dos+ servicios** funciona ensamblada (evento producido por uno → enrutado por el broker → consumido/proyectado por el otro; ambos reales, dos BD, JWT reales). Complementa Pact (que valida el contrato en aislamiento). **Un golden path por cada VECTOR** (dirección); si un servicio interactúa con varios, se prueba cada uno. | ambos servicios sobre `docker-compose.dev.yml` + broker + Keycloak; diseño y reporte por golden path | ídem (poliglota) |
 
-> **Golden paths documentados** (diseño + reporte, un archivo por interacción): `asset-inventory` →
-> `config-backup` en [`golden_path_asset_config-backup.md`](golden_path_asset_config-backup.md).
+> **Registro y gate:** todos los vectores viven en `backend/documentos/integracion/matriz_interaccion.md`
+> y cada uno se documenta+ejecuta con su golden path (`backend/documentos/integracion/golden_path_*.md`,
+> desde `templates/qa/golden_path_TEMPLATE.md`). Lo **obliga** el gatekeeper
+> `backend/scripts/check_golden_paths.py` en el gate de release (RNF-32): ningún vector con ambas partes
+> construidas puede quedar sin golden path ejecutado. Vectores cuya contraparte no existe → DIFERIDO.
+> **Primer golden path ejecutado:** `asset-inventory` → `config-backup` (Fase A).
 
 **Reglas transversales:**
 - **Cobertura mínima ≥ 70 % statements** por servicio (gate del `mvn verify` / `pytest --cov`).
