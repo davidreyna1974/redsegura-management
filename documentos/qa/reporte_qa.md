@@ -3,10 +3,11 @@
 Reporte consolidado de las campañas de QA por microservicio, bajo el
 [Protocolo de verificación en 4 fases](protocolo_verificacion_4_fases.md).
 
-**Última actualización:** 2026-07-24
+**Última actualización:** 2026-07-25
 **Resultado global:** ✅ **2 módulos certificados** (`asset-inventory-service`,
-`config-backup-service`), 0 bugs funcionales sin resolver, 0 regresiones. Resto de microservicios:
-sin iniciar.
+`config-backup-service`) + **1.er golden path event-driven validado** (`asset-inventory` →
+`config-backup`, 6/6 pasos, [`golden_path_asset_config-backup.md`](golden_path_asset_config-backup.md)),
+0 bugs funcionales sin resolver, 0 regresiones. Resto de microservicios: sin iniciar.
 
 ---
 
