@@ -111,6 +111,9 @@ Los ítems se anclan a una de estas etapas/condiciones, no a "el final":
 > Los tests automatizados **mockean** el dispositivo (estándar correcto: herméticos, sin red). Eso deja
 > un hueco de **fidelidad** frente al output real (prompts, paginación, banners, auth, timeouts). Se
 > cierra en **dos etapas** con la **herramienta adecuada a cada propósito** (ver tabla de herramientas).
+>
+> **Plan maestro y procedimientos ejecutables** (3 niveles, matriz multi-vendor, criterios de go-live):
+> `backend/documentos/validacion_dispositivos/plan_validacion_dispositivos.md`.
 
 **Herramienta por propósito (regla de decisión):**
 
