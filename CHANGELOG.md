@@ -7,6 +7,12 @@ versionado según [SemVer](https://semver.org/lang/es/).
 
 ## [No publicado]
 ### Añadido
+- **Checkpoint de pausa prolongada (2026-08-11):** documentos de sesión en `documentos/sesiones/`
+  — `contexto_sesion_siguiente.md` (handoff ejecutivo maestro: avance, punto exacto de retomada,
+  bifurcación de arranque) y `estado_sesion_activa.md` (tablero vivo detallado). Actualizados
+  `plan_general_proyecto_redSegura.md` (v1.3.0) y `qa/reporte_qa.md` con el estado de pausa y el
+  plan de validación de dispositivos (Fase 0). Template `sesiones/contexto_sesion_siguiente_TEMPLATE.md`
+  con ruta de bitácora consistente (`documentos/sesiones/`).
 - Inicialización del repositorio `management` con git-hook `pre-commit` (bloquea commits
   directos a `main`/`develop`) y `.gitignore`.
 - Reorganización documental: la documentación general del sistema se consolida bajo
