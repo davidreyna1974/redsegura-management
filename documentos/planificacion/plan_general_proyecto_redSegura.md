@@ -2,9 +2,11 @@
 
 **Documento:** Plan de trabajo general (operativiza la especificación del proyecto)
 **Proyecto:** redSegura — Plataforma de Automatización, Monitoreo y Gestión de Vulnerabilidades de Red
-**Versión del documento:** 1.2.0 · **Fecha:** 2026-07-11 · **Última actualización:** 2026-07-14
-**Autor:** David Reyna Pineda · **Estado del proyecto:** Fundación **completa**; Fase A en curso —
-`asset-inventory-service` implementado (112 tests, CI activo), pendiente su certificación QA de 4 fases
+**Versión del documento:** 1.3.0 · **Fecha:** 2026-07-11 · **Última actualización:** 2026-08-11
+**Autor:** David Reyna Pineda · **Estado del proyecto:** ⏸️ **pausa prolongada** — Fundación
+**completa**; Fase A en curso: `asset-inventory-service` y `config-backup-service` **implementados y
+QA certificados**; los 3 restantes de Fase A sin iniciar. Plan de validación de dispositivos Fase 0
+completa (ejecución pendiente). Handoff de retomada: `../sesiones/contexto_sesion_siguiente.md`
 
 ---
 

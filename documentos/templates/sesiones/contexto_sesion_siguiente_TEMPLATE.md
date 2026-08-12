@@ -10,7 +10,7 @@
 <3-5 líneas: en qué punto quedó el proyecto, qué se acaba de terminar, qué sigue.>
 
 ## 2. Lo primero que debe hacer la próxima sesión
-1. Leer `docs/qa/_bitacora/estado_sesion_activa.md` y este documento.
+1. Leer `documentos/sesiones/estado_sesion_activa.md` y este documento.
 2. Verificar congelamiento/entorno: `<cmds de arranque y health checks>`.
 3. <primer paso de trabajo concreto>.
 

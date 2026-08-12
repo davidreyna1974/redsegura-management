@@ -3,11 +3,17 @@
 Reporte consolidado de las campañas de QA por microservicio, bajo el
 [Protocolo de verificación en 4 fases](protocolo_verificacion_4_fases.md).
 
-**Última actualización:** 2026-07-25
+**Última actualización:** 2026-08-11 (⏸️ pausa prolongada — ver
+[`sesiones/contexto_sesion_siguiente.md`](../sesiones/contexto_sesion_siguiente.md))
 **Resultado global:** ✅ **2 módulos certificados** (`asset-inventory-service`,
 `config-backup-service`) + **1.er golden path event-driven validado** (`asset-inventory` →
 `config-backup`, 6/6 pasos, [`golden_path_asset_config-backup.md`](../../../backend/documentos/integracion/golden_path_asset_config-backup.md)),
 0 bugs funcionales sin resolver, 0 regresiones. Resto de microservicios: sin iniciar.
+
+> **Validación de fidelidad con dispositivos (SSH multi-vendor):** plan maestro **Fase 0 completa**
+> (`backend/documentos/validacion_dispositivos/plan_validacion_dispositivos.md`) + guías de captura
+> (general + Cisco DevNet). **Ejecución de niveles pendiente** (Nivel 1 fixtures a la espera de
+> capturas reales del usuario). No altera las certificaciones vigentes.
 
 ---
 
